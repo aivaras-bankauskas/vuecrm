@@ -1,0 +1,30 @@
+{
+    "navigationItems": [
+        {
+            "menuItem": {
+                "title": "Production",
+                "name": "production",
+                "path": "/production",
+                "vue": "ProductionPage"
+            }
+        },
+        {
+            "menuItem": {
+                "title": "Team",
+                "name": "team",
+                "path": "/team",
+                "vue": "TeamPage"
+            }
+        },
+        {
+            "menuItem": {
+                "title": "Company",
+                "name": "company",
+                "path": "/company",
+                "vue": "CompanyPage"
+            }
+        }
+    ]
+}
+
+  

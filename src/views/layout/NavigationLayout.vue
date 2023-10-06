@@ -29,18 +29,19 @@
                 <div class="flex h-16 items-center justify-between">
                     <div class="flex items-center">
                         <div class="text-color text-2xl mb-1">
-                            Company
+                            <RouterLink to="/">Company</RouterLink>
                         </div>
                         <div class="hidden md:block">
                             <div class="ml-10 flex items-baseline space-x-4">
-                                <a
+                                <RouterLink
                                     v-for="(navigationItem, index) in navigationItems"
                                     :key="index"
-                                    href="#"
+                                    :to="navigationItem.menuItem.path"
                                     class="px-3 py-2 text-lg text-color hover:text-hover border-b  border-background hover:border-b hover:border-hover"
+                                    active-class="text-hover border-b border-hover"
                                 >
                                     {{ navigationItem.menuItem.title }}
-                                </a>
+                                </RouterLink>
                             </div>
                         </div>
                     </div>
@@ -91,14 +92,16 @@
 
             <div v-if="isMenuOpen" id="mobile-menu" class="md:hidden">
                 <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
-                    <a
+                    <RouterLink
                         v-for="(navigationItem, index) in navigationItems"
                         :key="index"
-                        href="#"
-                        class="text-color hover:text-hover block px-3 py-2 text-base font-medium" @click="toggleMenu"
+                        :to="navigationItem.menuItem.path"
+                        class="text-color hover:text-hover block px-3 py-2 text-base font-medium"
+                        active-class="text-hover"
+                        @click="toggleMenu"
                     >
                         {{ navigationItem.menuItem.title }}
-                    </a>
+                    </RouterLink>
                 </div>
                 <div class="border-t border-color pb-3 pt-4">
                     <div class="flex items-center px-5">

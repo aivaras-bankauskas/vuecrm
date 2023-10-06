@@ -1,9 +1,9 @@
 <script setup lang="ts">
     import { defineAsyncComponent } from 'vue';
-    import { navigationItems } from '@/layout/navigation.json';
+    import { navigationItems } from '@/views/layout/navigation.json';
 
-    const NavigationLayout = defineAsyncComponent(() => import('@/layout/NavigationLayout.vue'));
-    const TwoColumnsLayout = defineAsyncComponent(() => import('@/layout/TwoColumnsLayout.vue'));
+    const NavigationLayout = defineAsyncComponent(() => import('@/views/layout/NavigationLayout.vue'));
+    const TwoColumnsLayout = defineAsyncComponent(() => import('@/views/layout/TwoColumnsLayout.vue'));
 </script>
 
 <template>
