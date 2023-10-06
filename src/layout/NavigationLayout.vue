@@ -42,7 +42,7 @@
                                     </button>
                                 </div>
                                 <div v-if="isUserMenuOpen" class="absolute right-0 z-10 mt-2 w-64 origin-top-right rounded-md bg-background py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
-                                    <svg class="h-5 w-5 hover:bg-background rounded-full absolute top-2 right-4  cursor-pointer" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" @click="toggleUserMenu">
+                                    <svg class="h-5 w-5 hover:border border-body-bg rounded-full absolute top-2 right-4  cursor-pointer" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" @click="toggleUserMenu">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                                     </svg>
                                     <div class="flex items-center ml-4 mt-2">
@@ -81,7 +81,7 @@
                     <a href="#" class="text-color hover:text-hover block px-3 py-2 text-base font-medium" @click="toggleMenu">Team</a>
                     <a href="#" class="text-color hover:text-hover block px-3 py-2 text-base font-medium" @click="toggleMenu">Company</a>
                 </div>
-                <div class="border-t border-gray-700 pb-3 pt-4">
+                <div class="border-t border-color pb-3 pt-4">
                     <div class="flex items-center px-5">
                         <div class="flex-shrink-0">
                             <img class="h-12 w-12 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
@@ -98,9 +98,5 @@
                 </div>
             </div>
         </nav>
-        <main>
-            <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-            </div>
-        </main>
     </div>
 </template>

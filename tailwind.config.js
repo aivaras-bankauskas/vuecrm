@@ -6,7 +6,8 @@ export default {
     ],
     theme: {
         colors: {
-            'background': '#f8fafc',
+            'body-bg': '#e5e7eb',
+            'background': '#ffffff',
             'color': '#111827',
             'hover': '#4f46e5',
             'primary': '#4f46e5',
