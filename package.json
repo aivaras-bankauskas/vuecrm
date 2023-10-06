@@ -7,10 +7,13 @@
     "dev": "vite --host",
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
+    "server": "json-server --watch src/database/database.json",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "vue": "^3.3.4"
+    "vue": "^3.3.4",
+    "vue-i18n": "^9.5.0",
+    "vue-router": "^4.2.5"
   },
   "devDependencies": {
     "@types/node": "^20.8.2",
@@ -20,6 +23,7 @@
     "eslint": "^8.50.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-vue": "^9.17.0",
+    "json-server": "^0.17.4",
     "postcss": "^8.4.31",
     "tailwindcss": "^3.3.3",
     "typescript": "^5.0.2",
