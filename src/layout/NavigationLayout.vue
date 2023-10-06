@@ -1,5 +1,14 @@
 <script setup lang="ts">
     import { ref } from 'vue';
+    import type { PropType } from 'vue';
+    import  NavigationInterface from '@/interfaces/navigation-interface';
+
+    defineProps({
+        navigationItems: {
+            type: Array as PropType<NavigationInterface[]>,
+            default: () => []
+        },
+    });
 
     const isMenuOpen = ref(false);
     const isUserMenuOpen = ref(false);
@@ -24,9 +33,14 @@
                         </div>
                         <div class="hidden md:block">
                             <div class="ml-10 flex items-baseline space-x-4">
-                                <a href="#" class="px-3 py-2 text-lg text-color hover:text-hover border-b  border-background hover:border-b hover:border-hover">Production</a>
-                                <a href="#" class="px-3 py-2 text-lg text-color hover:text-hover border-b  border-background hover:border-b hover:border-hover">Team</a>
-                                <a href="#" class="px-3 py-2 text-lg text-color hover:text-hover border-b  border-background hover:border-b hover:border-hover">Company</a>
+                                <a
+                                    v-for="(navigationItem, index) in navigationItems"
+                                    :key="index"
+                                    href="#"
+                                    class="px-3 py-2 text-lg text-color hover:text-hover border-b  border-background hover:border-b hover:border-hover"
+                                >
+                                    {{ navigationItem.menuItem.title }}
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -61,7 +75,7 @@
                         </div>
                     </div>
                     <div class="-mr-2 flex md:hidden">
-                        <button type="button" class="relative inline-flex items-center justify-center p-2 text-color focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-white" aria-controls="mobile-menu" aria-expanded="false" @click="toggleMenu">
+                        <button type="button" class="relative inline-flex items-center justify-center p-2 text-color focus:outline-none focus:ring-2 focus:ring-background focus:ring-offset-2 focus:ring-offset-background" aria-controls="mobile-menu" aria-expanded="false" @click="toggleMenu">
                             <span class="absolute -inset-0.5"></span>
                             <span class="sr-only">Open main menu</span>
                             <svg v-if="!isMenuOpen" class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
@@ -77,9 +91,14 @@
 
             <div v-if="isMenuOpen" id="mobile-menu" class="md:hidden">
                 <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
-                    <a href="#" class="text-color hover:text-hover block px-3 py-2 text-base font-medium" @click="toggleMenu">Production</a>
-                    <a href="#" class="text-color hover:text-hover block px-3 py-2 text-base font-medium" @click="toggleMenu">Team</a>
-                    <a href="#" class="text-color hover:text-hover block px-3 py-2 text-base font-medium" @click="toggleMenu">Company</a>
+                    <a
+                        v-for="(navigationItem, index) in navigationItems"
+                        :key="index"
+                        href="#"
+                        class="text-color hover:text-hover block px-3 py-2 text-base font-medium" @click="toggleMenu"
+                    >
+                        {{ navigationItem.menuItem.title }}
+                    </a>
                 </div>
                 <div class="border-t border-color pb-3 pt-4">
                     <div class="flex items-center px-5">

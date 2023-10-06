@@ -1,0 +1,21 @@
+{
+    "navigationItems": [
+        {
+            "menuItem": {
+                "title": "Production"
+            }
+        },
+        {
+            "menuItem": {
+                "title": "Team"
+            }
+        },
+        {
+            "menuItem": {
+                "title": "Company"
+            }
+        }
+    ]
+}
+
+  
