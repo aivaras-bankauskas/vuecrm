@@ -1,8 +1,11 @@
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { defineAsyncComponent, ref } from 'vue';
     import type { PropType } from 'vue';
     import { useI18n } from 'vue-i18n';
     import  NavigationInterface from '@/interfaces/navigation-interface';
+
+    const HamburgerComponent = defineAsyncComponent(() => import('@/components/base/icons/HamburgerComponent.vue'));
+    const IconComponent = defineAsyncComponent(() => import('@/components/base/icons/IconComponent.vue'));
 
     defineProps({
         navigationItems: {
@@ -65,9 +68,7 @@
                                     <button v-else class="w-4 text-center text-sm mx-4 cursor-pointer" @click="switchLanguage('en')">EN</button>
                                 </div>
                                 <div v-if="isUserMenuOpen" class="absolute right-11 z-10 mt-2 w-64 origin-top-right rounded-md bg-background py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
-                                    <svg class="h-5 w-5 hover:border border-body-bg rounded-full absolute top-2 right-4  cursor-pointer" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" @click="toggleUserMenu">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
+                                    <IconComponent src="src/assets/icons/close.svg" class="h-5 w-5 hover:border border-body-bg rounded-full absolute top-2 right-4  cursor-pointer" @click="toggleUserMenu" />
                                     <div class="flex items-center ml-4 mt-2">
                                         <img class="h-12 w-12 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="avatar">
                                         <div class="flex flex-col">
@@ -87,12 +88,7 @@
                         <button type="button" class="relative inline-flex items-center justify-center p-2 text-color focus:outline-none focus:ring-2 focus:ring-background focus:ring-offset-2 focus:ring-offset-background" aria-controls="mobile-menu" aria-expanded="false" @click="toggleMenu">
                             <span class="absolute -inset-0.5"></span>
                             <span class="sr-only">Open main menu</span>
-                            <svg v-if="!isMenuOpen" class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                            </svg>
-                            <svg v-else class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
+                            <HamburgerComponent :is-menu-open="!isMenuOpen" class="block h-6 w-6" />
                         </button>
                     </div>
                 </div>
