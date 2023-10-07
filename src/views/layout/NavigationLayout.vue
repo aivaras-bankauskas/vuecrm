@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import { ref } from 'vue';
     import type { PropType } from 'vue';
+    import { useI18n } from 'vue-i18n';
     import  NavigationInterface from '@/interfaces/navigation-interface';
 
     defineProps({
@@ -10,6 +11,7 @@
         },
     });
 
+    const { t } = useI18n({});
     const isMenuOpen = ref(false);
     const isUserMenuOpen = ref(false);
 
@@ -36,11 +38,11 @@
                                 <RouterLink
                                     v-for="(navigationItem, index) in navigationItems"
                                     :key="index"
-                                    :to="navigationItem.menuItem.path"
+                                    :to="`/${navigationItem.menuItem.name}`"
                                     class="px-3 py-2 text-lg text-color hover:text-hover border-b  border-background hover:border-b hover:border-hover"
                                     active-class="text-hover border-b border-hover"
                                 >
-                                    {{ navigationItem.menuItem.title }}
+                                    {{ t(`navigation.${navigationItem.menuItem.name}`) }}
                                 </RouterLink>
                             </div>
                         </div>
@@ -95,12 +97,12 @@
                     <RouterLink
                         v-for="(navigationItem, index) in navigationItems"
                         :key="index"
-                        :to="navigationItem.menuItem.path"
+                        :to="`/${navigationItem.menuItem.name}`"
                         class="text-color hover:text-hover block px-3 py-2 text-base font-medium"
                         active-class="text-hover"
                         @click="toggleMenu"
                     >
-                        {{ navigationItem.menuItem.title }}
+                        {{ navigationItem.menuItem.name }}
                     </RouterLink>
                 </div>
                 <div class="border-t border-color pb-3 pt-4">

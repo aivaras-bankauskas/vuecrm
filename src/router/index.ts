@@ -11,10 +11,10 @@ routes.push({
 });
 
 navigationItems.forEach((item: NavigationInterface): void => {
-    const { name, path, vue } = item.menuItem;
+    const { name, vue } = item.menuItem;
     routes.push({
-        path,
         name,
+        path: `/${name}`,
         component: (): Promise<Component> =>
             import(`@/views/pages/${vue}.vue`).catch(() => {
                 return import('@/views/pages/NotFound.vue');
@@ -24,8 +24,8 @@ navigationItems.forEach((item: NavigationInterface): void => {
 
 routes.push(
     {
+        name: 'not-found',
         path: '/:pathMatch(.*)*',
-        name: 'NotFound',
         component: (): Promise<Component> => import('@/views/pages/NotFound.vue')
     }
 );

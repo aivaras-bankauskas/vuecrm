@@ -1,4 +1,9 @@
 {
+    "navigation": {
+        "production": "Production",
+        "team": "Team",
+        "company": "Company"
+    },
     "labels": {
         "firstName": "First Name"
     }
