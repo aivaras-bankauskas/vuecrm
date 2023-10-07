@@ -2,7 +2,9 @@
     "navigation": {
         "production": "Production",
         "team": "Team",
-        "company": "Company"
+        "company": "Company",
+        "settings": "Settings",
+        "signOut": "Sign Out"
     },
     "labels": {
         "firstName": "First Name"

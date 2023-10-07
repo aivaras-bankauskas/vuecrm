@@ -76,8 +76,8 @@
                                         </div>
                                     </div>
                                     <div class="flex justify-between px-4 py-2">
-                                        <a id="user-menu-settings" href="#" class="text-sm" role="menuitem" tabindex="-1" @click="toggleUserMenu">Settings</a>
-                                        <a id="user-menu-logout" href="#" class="text-sm" role="menuitem" tabindex="-1" @click="toggleUserMenu">Sign out</a>
+                                        <a id="user-menu-settings" href="#" class="text-sm" role="menuitem" tabindex="-1" @click="toggleUserMenu">{{ t('navigation.settings') }}</a>
+                                        <a id="user-menu-logout" href="#" class="text-sm" role="menuitem" tabindex="-1" @click="toggleUserMenu">{{ t('navigation.signOut') }}</a>
                                     </div>
                                 </div>
                             </div>
@@ -108,7 +108,7 @@
                         active-class="text-hover"
                         @click="toggleMenu"
                     >
-                        {{ navigationItem.menuItem.name }}
+                        {{ t(`navigation.${navigationItem.menuItem.name}`) }}
                     </RouterLink>
                 </div>
                 <div class="border-t border-color pb-3 pt-4">
@@ -122,8 +122,12 @@
                         </div>
                     </div>
                     <div class="mt-3 space-y-1 px-2">
-                        <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-color hover:text-hover">Settings</a>
-                        <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-color hover:text-hover">Sign out</a>
+                        <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-color hover:text-hover">{{ t('navigation.settings') }}</a>
+                        <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-color hover:text-hover">{{ t('navigation.signOut') }}</a>
+                    </div>
+                    <div class="ml-3 mt-3">
+                        <button :class="{ 'text-hover': locale === 'lt' }" class="w-2 text-center text-sm mx-3 cursor-pointer" @click="switchLanguage('lt')">LT</button>
+                        <button :class="{ 'text-hover': locale === 'en' }" class="w-2 text-center text-sm mx-3 cursor-pointer" @click="switchLanguage('en')">EN</button>
                     </div>
                 </div>
             </div>

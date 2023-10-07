@@ -2,7 +2,9 @@
     "navigation": {
         "production": "Gamyba",
         "team": "Komanda",
-        "company": "Įmonė"
+        "company": "Įmonė",
+        "settings": "Nustatymai",
+        "signOut": "Atsijungti"
     },
     "labels": {
         "firstName": "Vardas"
