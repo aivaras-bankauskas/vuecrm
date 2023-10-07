@@ -1,0 +1,10 @@
+{
+    "navigation": {
+        "production": "Gamyba",
+        "team": "Komanda",
+        "company": "Įmonė"
+    },
+    "labels": {
+        "firstName": "Vardas"
+    }
+}
