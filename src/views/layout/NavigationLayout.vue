@@ -11,7 +11,7 @@
         },
     });
 
-    const { t } = useI18n({});
+    const { t, locale } = useI18n({});
     const isMenuOpen = ref(false);
     const isUserMenuOpen = ref(false);
 
@@ -21,6 +21,10 @@
 
     const toggleUserMenu = (): void => {
         isUserMenuOpen.value = !isUserMenuOpen.value;
+    };
+
+    const switchLanguage = (language: string): void => {
+        locale.value = language;
     };
 </script>
 
@@ -49,16 +53,18 @@
                     </div>
                     <div class="hidden md:block">
                         <div class="ml-4 flex items-center md:ml-6">
-                            <div id="user-desktop-name" class="text-sm" role="menuitem">Tom Johanson</div>
+                            <div id="user-desktop-name" class="text-sm cursor-pointer" role="menuitem" @click="toggleUserMenu">Tom Johanson</div>
                             <div class="relative ml-3">
-                                <div>
+                                <div class="flex items-center">
                                     <button id="user-menu-button" type="button" class="relative flex max-w-xs items-center rounded-full bg-background text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" aria-expanded="false" aria-haspopup="true" @click="toggleUserMenu">
                                         <span class="absolute -inset-1.5"></span>
                                         <span class="sr-only">Open user menu</span>
                                         <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="avatar">
                                     </button>
+                                    <button v-if="locale === 'en'" class="w-4 text-center text-sm mx-4 cursor-pointer" @click="switchLanguage('lt')">LT</button>
+                                    <button v-else class="w-4 text-center text-sm mx-4 cursor-pointer" @click="switchLanguage('en')">EN</button>
                                 </div>
-                                <div v-if="isUserMenuOpen" class="absolute right-0 z-10 mt-2 w-64 origin-top-right rounded-md bg-background py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+                                <div v-if="isUserMenuOpen" class="absolute right-11 z-10 mt-2 w-64 origin-top-right rounded-md bg-background py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
                                     <svg class="h-5 w-5 hover:border border-body-bg rounded-full absolute top-2 right-4  cursor-pointer" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" @click="toggleUserMenu">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                                     </svg>

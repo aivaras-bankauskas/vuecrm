@@ -3,7 +3,7 @@ import lt from '@/locales/lt.json';
 import en from '@/locales/en.json';
 const i18n = createI18n({
     legacy: false,
-    locale: 'lt',
+    locale: 'en',
     fallbackLocale: 'en',
     messages: { lt, en },
 });
