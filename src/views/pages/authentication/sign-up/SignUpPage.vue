@@ -3,7 +3,7 @@
     import APIService from '@/core/services/api-service';
     import UserInterface from '@/interfaces/UserInterface';
 
-    const InputComponent = defineAsyncComponent(() => import('@/components/base/input-components/InputComponent.vue'));
+    const InputComponent = defineAsyncComponent(() => import('@/components/input-components/InputComponent.vue'));
 
     const isFormValid = ref(true);
     const isFormSubmitted = ref(false);
