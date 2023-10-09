@@ -6,7 +6,12 @@
         "settings": "Nustatymai",
         "signOut": "Atsijungti"
     },
+
     "labels": {
-        "firstName": "Vardas"
+        "firstName": "Vardas",
+        "lastName": "Pavardė",
+        "email": "El. paštas",
+        "password": "Slaptažodis",
+        "confirmPassword": "Pakartokite slaptažodį"
     }
 }
