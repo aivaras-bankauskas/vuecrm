@@ -1,4 +1,4 @@
-import { validationRules } from '@/utilities/validation/validation-rules';
+import { validationRules } from '@/core/utilities/validation/validation-rules';
 
 export const validateField = (value: string, rules: string[]): string[] => {
     const errors: string[] = [];

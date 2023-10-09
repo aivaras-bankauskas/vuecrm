@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { computed, ref, watchEffect } from 'vue';
     import { useI18n } from 'vue-i18n';
-    import { validateField } from '@/utilities/validation/validation-hendler';
+    import { validateField } from '@/core/utilities/validation/validation-hendler';
 
     const props = defineProps({
         modelValue: {
@@ -78,4 +78,4 @@
             {{ errorMessage(inputName, activeErrors[0]) }}
         </div>
     </div>
-</template>
+</template>@/core/utilities/validation/validation-hendler
