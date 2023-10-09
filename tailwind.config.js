@@ -11,6 +11,7 @@ export default {
             'color': '#111827',
             'hover': '#4f46e5',
             'primary': '#4f46e5',
+            'primary-light': '#a5b4fc',
             'secondary': '#9ca3af',
             'success': '#22c55e',
             'danger': '#be185d',
