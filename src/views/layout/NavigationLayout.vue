@@ -2,7 +2,7 @@
     import { defineAsyncComponent, ref } from 'vue';
     import type { PropType } from 'vue';
     import { useI18n } from 'vue-i18n';
-    import  NavigationInterface from '@/interfaces/navigation-interface';
+    import  NavigationInterface from '@/interfaces/NavigationInterface';
 
     const HamburgerComponent = defineAsyncComponent(() => import('@/components/base/icon-components/HamburgerComponent.vue'));
     const IconComponent = defineAsyncComponent(() => import('@/components/base/icon-components/IconComponent.vue'));
