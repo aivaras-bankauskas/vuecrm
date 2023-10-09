@@ -71,7 +71,6 @@
             :name="inputName"
             :type="inputType"
             :class="inputStyle"
-            :required="false"
             v-bind="getPlaceholderAttribute()"
             @input="updateValue"
         >
