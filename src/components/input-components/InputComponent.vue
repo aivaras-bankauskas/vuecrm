@@ -74,8 +74,8 @@
             v-bind="getPlaceholderAttribute()"
             @input="updateValue"
         >
-        <div v-if="activeErrors.length > 0" class="text-start text-xs text-danger ml-3 mt-1.5">
+        <div v-show="activeErrors.length > 0" class="text-start text-xs text-danger ml-3 mt-1.5">
             {{ errorMessage(inputName, activeErrors[0]) }}
         </div>
     </div>
-</template>@/core/utilities/validation/validation-hendler
+</template>

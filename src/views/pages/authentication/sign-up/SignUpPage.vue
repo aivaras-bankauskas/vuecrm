@@ -1,5 +1,6 @@
 <script setup lang="ts">
-    import { defineAsyncComponent, ref, reactive } from 'vue';
+    import { defineAsyncComponent, ref, reactive, nextTick } from 'vue';
+    import { validateForm } from '@/core/utilities/validation/validation-hendler';
     import APIService from '@/core/services/api-service';
     import UserInterface from '@/interfaces/UserInterface';
 
@@ -7,6 +8,7 @@
 
     const isFormValid = ref(true);
     const isFormSubmitted = ref(false);
+    const inputErrors = reactive<{ [key: string]: string[] }>({});
 
     const formData = reactive<UserInterface>({
         firstName: '',
@@ -15,21 +17,18 @@
         password: '',
     });
 
-    const handleInputErrors = (newErrors: string[]): void => {
-        if (newErrors.length > 0) {
-            isFormValid.value = false;
-        } else {
-            isFormValid.value = true;
-        }
+    const handleInputErrors = (inputName: string, newErrors: string[]): void => {
+        validateForm({ inputName, newErrors, inputErrors, isFormValid });
     };
 
     const handleSubmit = async (): Promise<void> => {
+        isFormSubmitted.value = true;
+        await nextTick();
         if (isFormValid.value) {
             await APIService.store('/users', formData);
-            isFormSubmitted.value = true;
+            isFormSubmitted.value = false;
         }
     };
-
 </script>
 
 <template>
@@ -45,7 +44,7 @@
                             input-type="text"
                             :validation="['required']"
                             :is-form-submitted="isFormSubmitted"
-                            @update:errors="handleInputErrors"
+                            @update:errors="errors => handleInputErrors('firstName', errors)"
                         />
                         <InputComponent
                             v-model="formData.lastName"
@@ -53,7 +52,7 @@
                             input-type="text"
                             :validation="['required']"
                             :is-form-submitted="isFormSubmitted"
-                            @update:errors="handleInputErrors"
+                            @update:errors="errors => handleInputErrors('lastName', errors)"
                         />
                         <InputComponent
                             v-model="formData.email"
@@ -61,7 +60,7 @@
                             input-type="email"
                             :validation="['required','email']"
                             :is-form-submitted="isFormSubmitted"
-                            @update:errors="handleInputErrors"
+                            @update:errors="errors => handleInputErrors('email', errors)"
                         />
                         <InputComponent
                             v-model="formData.password"
@@ -69,11 +68,7 @@
                             input-type="password"
                             :validation="['required']"
                             :is-form-submitted="isFormSubmitted"
-                            @update:errors="handleInputErrors"
-                        />
-                        <InputComponent
-                            input-name="confirmPassword"
-                            input-type="password"
+                            @update:errors="errors => handleInputErrors('password', errors)"
                         />
                         <div>
                             <button type="submit" class="flex w-full justify-center rounded-md bg-primary px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign up</button>
