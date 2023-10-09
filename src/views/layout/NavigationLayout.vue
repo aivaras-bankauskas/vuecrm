@@ -4,8 +4,8 @@
     import { useI18n } from 'vue-i18n';
     import  NavigationInterface from '@/interfaces/navigation-interface';
 
-    const HamburgerComponent = defineAsyncComponent(() => import('@/components/base/icons/HamburgerComponent.vue'));
-    const IconComponent = defineAsyncComponent(() => import('@/components/base/icons/IconComponent.vue'));
+    const HamburgerComponent = defineAsyncComponent(() => import('@/components/base/icon-components/HamburgerComponent.vue'));
+    const IconComponent = defineAsyncComponent(() => import('@/components/base/icon-components/IconComponent.vue'));
 
     defineProps({
         navigationItems: {
