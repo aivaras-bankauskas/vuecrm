@@ -13,5 +13,11 @@
         "email": "El. paštas",
         "password": "Slaptažodis",
         "confirmPassword": "Pakartokite slaptažodį"
+    },
+
+    "errors": {
+        "field": "Laukelis",
+        "required": "Yra privalomas",
+        "email": "Turi būti el. pašto adresas"
     }
 }

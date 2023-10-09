@@ -13,5 +13,11 @@
         "email": "Email",
         "password": "Password",
         "confirmPassword": "Confirm Password"
+    },
+
+    "errors": {
+        "field": "Field",
+        "required": "Is required",
+        "email": "Must be a valid email address"
     }
 }
