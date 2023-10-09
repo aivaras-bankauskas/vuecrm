@@ -1,0 +1,23 @@
+{
+    "navigation": {
+        "production": "Production",
+        "team": "Team",
+        "company": "Company",
+        "settings": "Settings",
+        "signOut": "Sign Out"
+    },
+    
+    "labels": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email",
+        "password": "Password",
+        "confirmPassword": "Confirm Password"
+    },
+
+    "errors": {
+        "field": "Field",
+        "required": "Is required",
+        "email": "Must be a valid email address"
+    }
+}
