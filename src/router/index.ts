@@ -2,7 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import { Component } from 'vue';
 import authentication from './authentication';
 import { navigationItems } from '@/views/layout/navigation.json';
-import  NavigationInterface from '@/interfaces/navigation-interface';
+import  NavigationInterface from '@/interfaces/NavigationInterface';
 
 const routes: RouteRecordRaw[] = [];
 
@@ -38,7 +38,7 @@ routes.push(
 );
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.VITE_ENV_BASE_URL),
+    history: createWebHistory('/'),
     routes
 });
 
