@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { computed } from 'vue';
+    import { computed, ref, watch } from 'vue';
     import { useI18n } from 'vue-i18n';
 
     const props = defineProps({
@@ -25,33 +25,36 @@
         }
     });
 
-    console.log(props.error);
-
-
     const { t } = useI18n();
     const emit = defineEmits(['update:modelValue']);
+    const displayedError = ref('');
 
     const inputStyle = computed(() => {
-        return props.error
+        return displayedError.value
             ? 'block w-full rounded-md border-0 py-1.5 px-3 text-gray-dark shadow-sm ring-1 ring-inset ring-danger placeholder:text-gray focus:ring-2 focus:ring-inset focus:ring-danger-light sm:text-sm sm:leading-6'
             : 'block w-full rounded-md border-0 py-1.5 px-3 text-gray-dark shadow-sm ring-1 ring-inset ring-primary-light placeholder:text-gray focus:ring-2 focus:ring-inset focus:ring-primary-light sm:text-sm sm:leading-6';
     });
 
-    const errorMessage = (inputName: string, activeErrors: string): string => {
-        if (props.error) {
-            const errorTemplate = t(`errors.${activeErrors}`);
-            console.log(errorTemplate);
+    const updateValue = (event: Event): void => {
+        const target = event.target as HTMLInputElement;
+        emit('update:modelValue', target.value);
+        displayedError.value = '';
+    };
 
+    const getErrorMessage = (): void => {
+        if (props.error) {
+            displayedError.value = errorMessage(props.inputName, props.error);
+        }
+    };
+
+    const errorMessage = (inputName: string, error: string): string => {
+        if (error) {
+            const errorTemplate = t(`errors.${error}`);
             const formattedErrorMessage = errorTemplate.replace('{{inputName}}', t(`labels.${inputName}`));
 
             return formattedErrorMessage;
         }
         return '';
-    };
-
-    const updateValue = (event: Event): void => {
-        const target = event.target as HTMLInputElement;
-        emit('update:modelValue', target.value);
     };
 
     const getPlaceholderAttribute = (): { placeholder: string } => {
@@ -61,6 +64,8 @@
 
         return { placeholder: placeholder !== `placeholders.${props.inputName}` ? placeholder : label };
     };
+
+    watch(() => props.error, getErrorMessage);
 </script>
 
 <template>
@@ -78,6 +83,6 @@
             :data-rules="rules"
             @input="updateValue"
         >
-        <div class="h-2 text-start text-xs text-danger ml-3 mt-1.5">{{ errorMessage(inputName, error) }}</div>
+        <div class="h-2 text-start text-xs text-danger ml-3 mt-1.5">{{ displayedError }}</div>
     </div>
 </template>
