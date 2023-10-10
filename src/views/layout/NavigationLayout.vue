@@ -1,11 +1,10 @@
 <script setup lang="ts">
-    import { defineAsyncComponent, ref } from 'vue';
+    import { ref } from 'vue';
     import type { PropType } from 'vue';
     import { useI18n } from 'vue-i18n';
     import  NavigationInterface from '@/interfaces/NavigationInterface';
-
-    const HamburgerComponent = defineAsyncComponent(() => import('@/components/icon-components/HamburgerComponent.vue'));
-    const IconComponent = defineAsyncComponent(() => import('@/components/icon-components/IconComponent.vue'));
+    import HamburgerComponent from '@/components/icon-components/HamburgerComponent.vue';
+    import IconComponent from '@/components/icon-components/IconComponent.vue';
 
     defineProps({
         navigationItems: {
