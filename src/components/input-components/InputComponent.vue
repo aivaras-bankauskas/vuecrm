@@ -38,8 +38,6 @@
     });
 
     const errorMessage = (inputName: string, activeErrors: string): string => {
-        console.log(inputName, activeErrors);
-
         if (props.error) {
             const errorTemplate = t(`errors.${activeErrors}`);
             console.log(errorTemplate);
