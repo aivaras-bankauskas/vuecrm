@@ -25,7 +25,7 @@
         }
     });
 
-    const { t, te } = useI18n();
+    const { t, te, locale } = useI18n();
     const emit = defineEmits(['update:modelValue']);
     const displayedError = ref('');
 
@@ -69,7 +69,7 @@
         return { placeholder: placeholder !== '' ? placeholder : label };
     };
 
-    watch(() => props.error, getErrorMessage);
+    watch([(): string => props.error, (): string => locale.value], getErrorMessage);
 </script>
 
 <template>
