@@ -25,7 +25,7 @@
         }
     });
 
-    const { t } = useI18n();
+    const { t, te } = useI18n();
     const emit = defineEmits(['update:modelValue']);
     const displayedError = ref('');
 
@@ -58,11 +58,15 @@
     };
 
     const getPlaceholderAttribute = (): { placeholder: string } => {
-        const getTranslation = (type: string): string => t(`${type}.${props.inputName}`);
+        const getTranslation = (type: string): string => {
+            const key = `${type}.${props.inputName}`;
+            return te(key) ? t(key) : '';
+        };
+
         const placeholder: string = getTranslation('placeholders');
         const label: string = getTranslation('labels');
 
-        return { placeholder: placeholder !== `placeholders.${props.inputName}` ? placeholder : label };
+        return { placeholder: placeholder !== '' ? placeholder : label };
     };
 
     watch(() => props.error, getErrorMessage);
