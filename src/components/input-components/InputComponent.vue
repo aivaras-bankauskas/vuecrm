@@ -1,7 +1,6 @@
 <script setup lang="ts">
-    import { computed, ref, watchEffect } from 'vue';
+    import { computed } from 'vue';
     import { useI18n } from 'vue-i18n';
-    import { validateField } from '@/core/utilities/validation/validation-hendler';
 
     const props = defineProps({
         modelValue: {
@@ -16,34 +15,40 @@
             type: String,
             default: 'text'
         },
-        validation: {
-            type: Array,
-            default: () => ([] as string[])
+        rules: {
+            type: String,
+            default: ''
         },
-        isFormSubmitted: {
-            type: Boolean,
-            default: false
+        error: {
+            type: String,
+            default: ''
         }
     });
 
-    const { t } = useI18n();
-    const emit = defineEmits(['update:modelValue', 'update:errors']);
-    const activeErrors = ref<string[]>([]);
+    console.log(props.error);
 
-    watchEffect(() => {
-        if (!props.isFormSubmitted) return;
-        activeErrors.value = validateField(props.modelValue as string, props.validation as string[]);
-        emit('update:errors', activeErrors.value);
-    });
+
+    const { t } = useI18n();
+    const emit = defineEmits(['update:modelValue']);
 
     const inputStyle = computed(() => {
-        return activeErrors.value.length > 0
+        return props.error
             ? 'block w-full rounded-md border-0 py-1.5 px-3 text-gray-dark shadow-sm ring-1 ring-inset ring-danger placeholder:text-gray focus:ring-2 focus:ring-inset focus:ring-danger-light sm:text-sm sm:leading-6'
             : 'block w-full rounded-md border-0 py-1.5 px-3 text-gray-dark shadow-sm ring-1 ring-inset ring-primary-light placeholder:text-gray focus:ring-2 focus:ring-inset focus:ring-primary-light sm:text-sm sm:leading-6';
     });
 
     const errorMessage = (inputName: string, activeErrors: string): string => {
-        return `${t('errors.field')} ${t(`labels.${inputName}`).toLowerCase()} ${t(`errors.${activeErrors}`).toLowerCase()}`;
+        console.log(inputName, activeErrors);
+
+        if (props.error) {
+            const errorTemplate = t(`errors.${activeErrors}`);
+            console.log(errorTemplate);
+
+            const formattedErrorMessage = errorTemplate.replace('{{inputName}}', t(`labels.${inputName}`));
+
+            return formattedErrorMessage;
+        }
+        return '';
     };
 
     const updateValue = (event: Event): void => {
@@ -62,8 +67,8 @@
 
 <template>
     <div>
-        <label for="password" class="block text-sm font-medium text-color text-start mb-2">
-            {{ t(`labels.${inputName}`) }} {{ validation.length > 0 ? '*' : '' }}
+        <label :for="inputName" class="block text-sm font-medium text-color text-start mb-2">
+            {{ t(`labels.${inputName}`) }}
         </label>
         <input
             :id="inputName"
@@ -72,10 +77,9 @@
             :type="inputType"
             :class="inputStyle"
             v-bind="getPlaceholderAttribute()"
+            :data-rules="rules"
             @input="updateValue"
         >
-        <div v-show="activeErrors.length > 0" class="text-start text-xs text-danger ml-3 mt-1.5">
-            {{ errorMessage(inputName, activeErrors[0]) }}
-        </div>
+        <div class="h-2 text-start text-xs text-danger ml-3 mt-1.5">{{ errorMessage(inputName, error) }}</div>
     </div>
 </template>
