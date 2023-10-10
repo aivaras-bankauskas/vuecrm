@@ -18,6 +18,7 @@
     "errors": {
         "field": "Laukelis",
         "required": "Yra privalomas",
-        "email": "Turi būti el. pašto adresas"
+        "email": "Turi būti el. pašto adresas",
+        "alpha": "Turi būti tik raidės"
     }
 }
