@@ -19,6 +19,6 @@
         "field": "Laukelis",
         "required": "Yra privalomas",
         "email": "Turi būti el. pašto adresas",
-        "alpha": "Turi būti tik raidės"
+        "alpha": "Galima naudoti tik raides"
     }
 }
