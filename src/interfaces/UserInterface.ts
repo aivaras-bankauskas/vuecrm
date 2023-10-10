@@ -4,6 +4,7 @@ interface UserInterface {
     email: string;
     password?: string;
     confirmPassword?: string;
+    [key: string]: string | undefined;
 }
 
 export default UserInterface;
