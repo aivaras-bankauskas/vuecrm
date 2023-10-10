@@ -9,12 +9,23 @@
     const data = {
         formData: {
             'firstName': '',
+            'lastName': '',
+            'email': '',
         },
-        input: {
-            inputTitle: 'First name',
-            inputName: 'firstName',
-            rules: ['required', 'alpha']
-        },
+        inputs: [
+            {
+                inputName: 'firstName',
+                rules: ['required', 'alpha']
+            },
+            {
+                inputName: 'lastName',
+                rules: ['required', 'alpha']
+            },
+            {
+                inputName: 'email',
+                rules: ['required', 'email']
+            }
+        ]
     };
 
     const formData = reactive<UserInterface>({ ...data.formData });
@@ -51,12 +62,12 @@
                 <h2 class="mt-5 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign up</h2>
                 <div class="mt-10">
                     <form class="space-y-4" @submit.prevent="handleSubmit">
-                        <div>
+                        <div v-for="(input, index) in data.inputs" :key="index">
                             <InputComponent
-                                v-model="formData.firstName"
-                                :input-name="data.input.inputName"
-                                :rules="data.input.rules.join('|')"
-                                :error="validationErrors[data.input.inputName]"
+                                v-model="formData[input.inputName]"
+                                :input-name="input.inputName"
+                                :rules="input.rules.join('|')"
+                                :error="validationErrors[input.inputName]"
                             />
                         </div>
                         <div class="pt-4">
