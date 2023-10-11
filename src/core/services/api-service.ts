@@ -16,11 +16,11 @@ export default {
     get(endpoint: string, id: number): Promise<void> {
         return apiClient.get(`${endpoint}/${id}`);
     },
-    store(endpoint: string, item: object): Promise<void> {
-        return apiClient.post(endpoint, item);
+    store(endpoint: string, data: object): Promise<void> {
+        return apiClient.post(endpoint, data);
     },
-    update(endpoint: string, id: number, item: object): Promise<void> {
-        return apiClient.put(`${endpoint}/${id}`, item);
+    update(endpoint: string, id: number, data: object): Promise<void> {
+        return apiClient.put(`${endpoint}/${id}`, data);
     },
     delete(endpoint: string, id: number): Promise<void> {
         return apiClient.delete(`${endpoint}/${id}`);
