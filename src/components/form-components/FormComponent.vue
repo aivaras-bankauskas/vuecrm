@@ -33,7 +33,7 @@
         Object.fromEntries(Object.keys(formData).map(key => [key, '']))
     );
 
-    const handleSubmit = async (): Promise<void> => {
+    const submitFormData = async (): Promise<void> => {
         const formElement = document.querySelector('form');
         const [isValid, errors] = validationHandler.validateFormData(formElement);
 
@@ -55,7 +55,7 @@
 </script>
 
 <template>
-    <form @submit.prevent="handleSubmit">
+    <form @submit.prevent="submitFormData">
         <InputGroup
             :form-data="formData"
             :inputs="inputs"
