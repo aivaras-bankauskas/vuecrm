@@ -35,10 +35,17 @@
             : 'block w-full rounded-md border-0 py-1.5 px-3 text-gray-dark shadow-sm ring-1 ring-inset ring-primary-light placeholder:text-gray focus:ring-2 focus:ring-inset focus:ring-primary-light sm:text-sm sm:leading-6';
     });
 
+    console.log(props.rules);
+
+
     const updateValue = (event: Event): void => {
         const target = event.target as HTMLInputElement;
         emit('update:modelValue', target.value);
-        displayedError.value = '';
+        if (props.rules.split('|').includes('required') && target.value === '') {
+            displayedError.value = errorMessage(props.inputName, 'required');
+        } else {
+            displayedError.value = '';
+        }
     };
 
     const getErrorMessage = (): void => {
