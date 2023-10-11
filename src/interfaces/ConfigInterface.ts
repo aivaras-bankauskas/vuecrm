@@ -1,6 +1,6 @@
 interface ConfigInterface {
-    URL: string;
     API: string;
+    redirect: string;
 }
 
 export default ConfigInterface;
