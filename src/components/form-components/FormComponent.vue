@@ -2,8 +2,8 @@
     import { defineAsyncComponent, reactive, onMounted } from 'vue';
     import type { PropType } from 'vue';
     import { getFormData, submitFormData } from '@/core/utilities/handlers/form-handler';
-    import InputInterface from '@/interfaces/InputInterface';
-    import ConfigInterface from '@/interfaces/ConfigInterface';
+    import InputInterface from '@/core/interfaces/InputInterface';
+    import ConfigInterface from '@/core/interfaces/ConfigInterface';
 
     const InputGroup = defineAsyncComponent(() => import('@/components/input-components/InputGroup.vue'));
 

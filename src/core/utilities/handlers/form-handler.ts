@@ -1,6 +1,6 @@
 import APIService from '@/core/services/api-service';
 import validationHandler from '@/core/utilities/validation/validation-hendler';
-import ConfigInterface from '@/interfaces/ConfigInterface';
+import ConfigInterface from '@/core/interfaces/ConfigInterface';
 
 export const getFormData = async (
     urlId: number | null,
