@@ -16,8 +16,8 @@
     },
 
     "errors": {
-        "field": "Field",
-        "required": "Is required",
-        "email": "Must be a valid email address"
+        "required": "{{inputName}} is required",
+        "email": "Field {{inputName}} must be a valid email address",
+        "alpha": "Field {{inputName}} must contain only letters"
     }
 }

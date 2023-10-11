@@ -16,8 +16,8 @@
     },
 
     "errors": {
-        "field": "Laukelis",
-        "required": "Yra privalomas",
-        "email": "Turi būti el. pašto adresas"
+        "required": "Laukelis {{inputName}} yra privalomas",
+        "email": "Laukelis {{inputName}} turi būti el. pašto adresas",
+        "alpha": "Laukelyje {{inputName}} galima naudoti tik raides"
     }
 }
