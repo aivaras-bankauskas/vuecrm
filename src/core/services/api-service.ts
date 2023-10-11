@@ -20,7 +20,7 @@ export default {
         return apiClient.post(endpoint, data);
     },
     update(endpoint: string, id: number, data: object): Promise<AxiosResponse> {
-        return apiClient.put(`${endpoint}/${id}`, data);
+        return apiClient.patch(`${endpoint}/${id}`, data);
     },
     delete(endpoint: string, id: number): Promise<AxiosResponse> {
         return apiClient.delete(`${endpoint}/${id}`);
