@@ -33,14 +33,12 @@
     let initialFormData: Record<string, unknown> = {};
 
     onMounted(async() => {
-        if (props.urlId) {
-            initialFormData = await getFormData(props.urlId, formData, props.config);
-        }
+        if (props.urlId) initialFormData = await getFormData(props.urlId, formData, props.config);
     });
 
     const submitForm = async (): Promise<void> => {
         await submitFormData(props.urlId, formData, initialFormData, validationErrors, props.config, props.data);
-        router.push(props.config.redirect);
+        if (props.config.redirect !== '') router.push(props.config.redirect);
     };
 </script>
 
