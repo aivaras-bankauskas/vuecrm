@@ -1,7 +1,8 @@
 <script setup lang="ts">
     import { defineAsyncComponent, reactive, onMounted } from 'vue';
     import type { PropType } from 'vue';
-    import { getFormData, submitFormData } from '@/core/utilities/handlers/form-handler';
+    import { useRouter } from 'vue-router';
+    import { getFormData, submitFormData } from '@/core/handlers/form-handler';
     import InputInterface from '@/core/interfaces/InputInterface';
     import ConfigInterface from '@/core/interfaces/ConfigInterface';
 
@@ -26,6 +27,7 @@
         }
     });
 
+    const router = useRouter();
     const formData = reactive({ ...props.data });
     const validationErrors = reactive(Object.fromEntries(Object.keys(formData).map(key => [key, ''])));
     let initialFormData: Record<string, unknown> = {};
@@ -38,6 +40,7 @@
 
     const submitForm = async (): Promise<void> => {
         await submitFormData(props.urlId, formData, initialFormData, validationErrors, props.config, props.data);
+        router.push(props.config.redirect);
     };
 </script>
 
@@ -54,3 +57,4 @@
     </form>
 
 </template>
+@/core/handlers/form-handler
