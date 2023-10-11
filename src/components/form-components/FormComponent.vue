@@ -1,8 +1,7 @@
 <script setup lang="ts">
-    import { defineAsyncComponent, reactive } from 'vue';
+    import { defineAsyncComponent, reactive, onMounted } from 'vue';
     import type { PropType } from 'vue';
-    import APIService from '@/core/services/api-service';
-    import validationHandler from '@/core/utilities/validation/validation-hendler';
+    import { getFormData, submitFormData } from '@/core/utilities/handlers/form-handler';
     import InputInterface from '@/interfaces/InputInterface';
     import ConfigInterface from '@/interfaces/ConfigInterface';
 
@@ -28,34 +27,22 @@
     });
 
     const formData = reactive({ ...props.data });
+    const validationErrors = reactive(Object.fromEntries(Object.keys(formData).map(key => [key, ''])));
+    let initialFormData: Record<string, unknown> = {};
 
-    const validationErrors = reactive(
-        Object.fromEntries(Object.keys(formData).map(key => [key, '']))
-    );
-
-    const submitFormData = async (): Promise<void> => {
-        const formElement = document.querySelector('form');
-        const [isValid, errors] = validationHandler.validateFormData(formElement);
-
-        for (const key of Object.keys(validationErrors)) {
-            validationErrors[key] = '';
+    onMounted(async() => {
+        if (props.urlId) {
+            initialFormData = await getFormData(props.urlId, formData, props.config);
         }
+    });
 
-        if (isValid) {
-            await APIService.store(props.config.API, formData);
-            resetFormData();
-        } else {
-            Object.assign(validationErrors, errors);
-        }
-    };
-
-    const resetFormData = (): void => {
-        Object.assign(formData, props.data);
+    const submitForm = async (): Promise<void> => {
+        await submitFormData(props.urlId, formData, initialFormData, validationErrors, props.config, props.data);
     };
 </script>
 
 <template>
-    <form @submit.prevent="submitFormData">
+    <form @submit.prevent="submitForm">
         <InputGroup
             :form-data="formData"
             :inputs="inputs"
