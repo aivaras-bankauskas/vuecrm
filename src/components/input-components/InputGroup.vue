@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { defineAsyncComponent, ref } from 'vue';
     import type { PropType } from 'vue';
-    import InputInterface from '@/interfaces/InputInterface';
+    import InputInterface from '@/core/interfaces/InputInterface';
 
     const InputComponent = defineAsyncComponent(() => import('@/components/input-components/InputComponent.vue'));
 

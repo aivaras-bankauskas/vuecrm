@@ -6,8 +6,8 @@
 
     const data = {
         config: {
-            URL: '/users',
-            API: '/users'
+            API: '/users',
+            redirect: '/users'
         },
         formData: {
             'firstName': '',
