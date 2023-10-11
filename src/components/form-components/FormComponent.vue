@@ -4,16 +4,21 @@
     import APIService from '@/core/services/api-service';
     import validationHandler from '@/core/utilities/validation/validation-hendler';
     import InputInterface from '@/interfaces/InputInterface';
+    import ConfigInterface from '@/interfaces/ConfigInterface';
 
     const InputGroup = defineAsyncComponent(() => import('@/components/input-components/InputGroup.vue'));
 
     const props = defineProps({
+        urlId: {
+            type: Number as PropType<number | null>,
+            default: null
+        },
         config: {
-            type: Object,
+            type: Object as PropType<ConfigInterface>,
             required: true
         },
         data: {
-            type: Object,
+            type: Object as PropType<Record<string, unknown>>,
             required: true
         },
         inputs: {

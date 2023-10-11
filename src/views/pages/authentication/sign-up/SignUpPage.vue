@@ -39,14 +39,13 @@
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
             <div class="bg-white p-6 rounded-lg shadow-md">
                 <h2 class="mt-5 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign up</h2>
-                <div class="mt-10">
-                    <FormComponent
-                        class="space-y-4"
-                        :config="data.config"
-                        :data="formData"
-                        :inputs="data.inputs"
-                    />
-                </div>
+                <FormComponent
+                    class="space-y-4 mt-10"
+                    :url-id="null"
+                    :config="data.config"
+                    :data="formData"
+                    :inputs="data.inputs"
+                />
             </div>
         </div>
     </div>
