@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 const apiClient = axios.create({
     baseURL: import.meta.env.VITE_ENV_BASE_URL,
@@ -10,19 +10,19 @@ const apiClient = axios.create({
 });
 
 export default {
-    getAll(endpoint: string): Promise<void> {
+    getAll(endpoint: string): Promise<AxiosResponse> {
         return apiClient.get(endpoint);
     },
-    get(endpoint: string, id: number): Promise<void> {
+    get(endpoint: string, id: number): Promise<AxiosResponse> {
         return apiClient.get(`${endpoint}/${id}`);
     },
-    store(endpoint: string, item: object): Promise<void> {
-        return apiClient.post(endpoint, item);
+    store(endpoint: string, data: object): Promise<AxiosResponse> {
+        return apiClient.post(endpoint, data);
     },
-    update(endpoint: string, id: number, item: object): Promise<void> {
-        return apiClient.put(`${endpoint}/${id}`, item);
+    update(endpoint: string, id: number, data: object): Promise<AxiosResponse> {
+        return apiClient.patch(`${endpoint}/${id}`, data);
     },
-    delete(endpoint: string, id: number): Promise<void> {
+    delete(endpoint: string, id: number): Promise<AxiosResponse> {
         return apiClient.delete(`${endpoint}/${id}`);
     },
 };
