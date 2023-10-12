@@ -21,6 +21,14 @@
         {
             "inputName": "email",
             "rules": ["required", "email"]
+        },
+        {
+            "inputName": "password",
+            "rules": ["required", "password"]
+        },
+        {
+            "inputName": "confirmPassword",
+            "rules": ["required", "password"]
         }
     ]
 }
