@@ -38,7 +38,9 @@
 
     const submitForm = async (): Promise<void> => {
         await submitFormData(props.urlId, formData, initialFormData, validationErrors, props.config, props.data);
-        if (props.config.redirect !== '') router.push(props.config.redirect);
+        if (Object.values(validationErrors).every(error => error === '') && props.config.redirect !== '') {
+            router.push(props.config.redirect);
+        }
     };
 </script>
 
