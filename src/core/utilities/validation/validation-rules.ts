@@ -8,8 +8,8 @@ const validationRules: Record<string, ValidationFunction> = {
     required: (value: string): string => (value == null || value === '') ? 'required' : '',
     email: (value: string): string => (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)) ? 'email' : '',
     alpha: (value: string): string => (!/^\p{L}+$/gu.test(value)) ? 'alpha' : '',
-    min: (value, min: number): string  => (value.length < min) ? 'min' : '',
-    max: (value: string, max: number): string => (value.length > max) ? 'max' : ''
+    min: (value, min: number): string  => (value.length < min) ? `min:${min}` : '',
+    max: (value: string, max: number): string => (value.length > max) ? `max:${max}` : ''
 };
 
 export default validationRules;
