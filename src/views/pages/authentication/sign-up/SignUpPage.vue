@@ -11,7 +11,7 @@
 </script>
 
 <template>
-    <CardForm :title="data.config.title">
+    <CardForm :title="data.config.name">
         <template #card-form-body>
             <FormComponent
                 class="space-y-4 mt-10"
