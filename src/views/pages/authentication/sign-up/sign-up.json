@@ -24,11 +24,8 @@
         },
         {
             "inputName": "password",
-            "rules": ["required", "password"]
-        },
-        {
-            "inputName": "confirmPassword",
-            "rules": ["required", "password"]
+            "inputType": "password",
+            "rules": ["required", "password", "min:6"]
         }
     ]
 }
