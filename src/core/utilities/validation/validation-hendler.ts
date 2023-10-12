@@ -1,4 +1,6 @@
 import validationRules from '@/core/utilities/validation/validation-rules';
+type ValidationFunctionSingleArg = (value: string) => string;
+type ValidationFunctionDoubleArg = (value: string, minOrMax: number) => string;
 
 const getValue = (inputElement: Element): string => {
     switch (inputElement.tagName) {
@@ -27,10 +29,20 @@ const validateFormData = (formElement: Element | null): [boolean, Record<string,
 
         let error = '';
         for (const rule of rules) {
-            if (validationRules[rule as keyof typeof validationRules]) {
-                error = validationRules[rule as keyof typeof validationRules](value);
-                if (error) {
-                    break;
+            if (rule.includes(':')) {
+                const [ruleName, param] = rule.split(':');
+                if (validationRules[ruleName as keyof typeof validationRules]) {
+                    error = (validationRules[ruleName] as ValidationFunctionDoubleArg)(value, parseInt(param));
+                    if (error) {
+                        break;
+                    }
+                }
+            } else {
+                if (validationRules[rule as keyof typeof validationRules]) {
+                    error = (validationRules[rule] as ValidationFunctionSingleArg)(value);
+                    if (error) {
+                        break;
+                    }
                 }
             }
         }
