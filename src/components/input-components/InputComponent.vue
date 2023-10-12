@@ -113,8 +113,8 @@
             >
             <div class="absolute inset-y-0 right-1 flex items-center p-1" @click="toggleEye">
                 <div v-if="inputName === 'password'">
-                    <IconComponent v-if="!isEyeOpen" src="src/assets/icons/eye-close.svg" class="h-5 w-auto cursor-pointer" />
-                    <IconComponent v-else src="src/assets/icons/eye-open.svg" class="h-6 w-auto cursor-pointer" />
+                    <IconComponent v-if="!isEyeOpen" src="src/assets/icons/eye-close.svg" class="h-6 w-auto text-gray-light cursor-pointer" />
+                    <IconComponent v-else src="src/assets/icons/eye-open.svg" class="h-6 w-auto text-gray-light cursor-pointer" />
                 </div>
             </div>
         </div>
