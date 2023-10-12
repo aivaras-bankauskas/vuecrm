@@ -46,6 +46,3 @@ export const submitFormData = async (
         Object.assign(validationErrors, errors);
     }
 };
-
-
-

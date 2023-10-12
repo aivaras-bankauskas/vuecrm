@@ -55,4 +55,3 @@
     </form>
 
 </template>
-@/core/handlers/form-handler
