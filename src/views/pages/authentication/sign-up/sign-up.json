@@ -12,14 +12,17 @@
     "inputs": [
         {
             "inputName": "firstName",
+            "inputType": "text",
             "rules": ["required", "alpha"]
         },
         {
             "inputName": "lastName",
+            "inputType": "text",
             "rules": ["required", "alpha"]
         },
         {
             "inputName": "email",
+            "inputType": "email",
             "rules": ["required", "email"]
         },
         {

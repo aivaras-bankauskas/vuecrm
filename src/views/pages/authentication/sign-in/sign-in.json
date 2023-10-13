@@ -12,6 +12,7 @@
     "inputs": [
         {
             "inputName": "email",
+            "inputType": "email",
             "rules": ["required", "email"]
         },
         {
