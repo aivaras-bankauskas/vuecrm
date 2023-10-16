@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import { computed, ref, watch } from 'vue';
     import { useI18n } from 'vue-i18n';
+    import IconComponent from '../icon-components/IconComponent.vue';
 
     const props = defineProps({
         modelValue: {
@@ -28,6 +29,8 @@
     const { t, te, locale } = useI18n();
     const emit = defineEmits(['update:modelValue']);
     const displayedError = ref('');
+    const inputType = ref(props.inputType);
+    const isEyeOpen = ref(false);
 
     const inputStyle = computed(() => {
         return displayedError.value
@@ -56,10 +59,16 @@
 
     const errorMessage = (inputName: string, error: string): string => {
         if (error) {
-            const errorTemplate = t(`errors.${error}`);
-            const formattedErrorMessage = errorTemplate.replace('{{inputName}}', t(`labels.${inputName}`));
-
-            return formattedErrorMessage;
+            if (!error.includes(':')) {
+                const errorTemplate = t(`errors.${error}`);
+                const formattedErrorMessage = errorTemplate.replace('{{inputName}}', t(`labels.${inputName}`));
+                return formattedErrorMessage;
+            } else {
+                const [errorType, errorValue] = error.split(':');
+                const errorTemplate = t(`errors.${errorType}`);
+                const formattedErrorMessage = errorTemplate.replace('{{inputName}}', t(`labels.${inputName}`));
+                return formattedErrorMessage.replace('{{count}}', errorValue);
+            }
         }
         return '';
     };
@@ -76,6 +85,13 @@
         return { placeholder: placeholder !== '' ? placeholder : label };
     };
 
+    const toggleEye = (): void => {
+        isEyeOpen.value = !isEyeOpen.value;
+        if (props.inputName === 'password') {
+            inputType.value = !isEyeOpen.value ? 'password' : 'text';
+        }
+    };
+
     watch([(): string => props.error, (): string => locale.value], getErrorMessage);
 </script>
 
@@ -84,16 +100,24 @@
         <label :for="inputName" class="block text-sm font-medium text-color text-start mb-2">
             {{ t(`labels.${inputName}`) }}
         </label>
-        <input
-            :id="inputName"
-            :value="modelValue"
-            :name="inputName"
-            :type="inputType"
-            :class="inputStyle"
-            v-bind="getPlaceholderAttribute()"
-            :data-rules="rules"
-            @input="updateValue"
-        >
+        <div class="relative mt-2 rounded-md shadow-sm">
+            <input
+                :id="inputName"
+                :value="modelValue"
+                :name="inputName"
+                :type="inputType"
+                :class="inputStyle"
+                v-bind="getPlaceholderAttribute()"
+                :data-rules="rules"
+                @input="updateValue"
+            >
+            <div class="absolute inset-y-0 right-1 flex items-center p-1" @click="toggleEye">
+                <div v-if="inputName === 'password'">
+                    <IconComponent v-if="!isEyeOpen" src="src/assets/icons/eye-close.svg" class="h-6 w-auto text-gray-light cursor-pointer" />
+                    <IconComponent v-else src="src/assets/icons/eye-open.svg" class="h-6 w-auto text-gray-light cursor-pointer" />
+                </div>
+            </div>
+        </div>
         <div class="h-2 text-start text-xs text-danger ml-3 mt-1.5">{{ displayedError }}</div>
     </div>
 </template>

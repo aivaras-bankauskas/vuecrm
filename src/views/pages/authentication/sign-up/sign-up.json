@@ -1,0 +1,34 @@
+{
+    "config": {
+        "name": "signUp",
+        "API": "/users",
+        "redirect": "/users"
+    },
+    "formData": {
+        "firstName": "",
+        "lastName": "",
+        "email": ""
+    },
+    "inputs": [
+        {
+            "inputName": "firstName",
+            "inputType": "text",
+            "rules": ["required", "alpha"]
+        },
+        {
+            "inputName": "lastName",
+            "inputType": "text",
+            "rules": ["required", "alpha"]
+        },
+        {
+            "inputName": "email",
+            "inputType": "email",
+            "rules": ["required", "email"]
+        },
+        {
+            "inputName": "password",
+            "inputType": "password",
+            "rules": ["required", "password", "min:6"]
+        }
+    ]
+}

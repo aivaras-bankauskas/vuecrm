@@ -3,7 +3,14 @@
         "production": "Gamyba",
         "team": "Komanda",
         "company": "Įmonė",
-        "settings": "Nustatymai",
+        "settings": "Nustatymai"
+    },
+
+    "buttons": {
+        "haveAccount": "Turite paskyrą?",
+        "dontHaveAccount": "Neturite paskyros?",
+        "signIn": "Prisijungti",
+        "signUp": "Registruotis",
         "signOut": "Atsijungti"
     },
 
@@ -16,6 +23,7 @@
     },
 
     "errors": {
+        "password": "Laukelyje {{inputName}} privaloma naudoti bent vieną skaičių ir raidę",
         "required": "Laukelis {{inputName}} yra privalomas",
         "email": "Laukelis {{inputName}} turi būti el. pašto adresas",
         "alpha": "Laukelyje {{inputName}} galima naudoti tik raides"

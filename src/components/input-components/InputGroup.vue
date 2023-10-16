@@ -28,6 +28,7 @@
         <InputComponent
             v-model="localFormData[input.inputName]"
             :input-name="input.inputName"
+            :input-type="input.inputType"
             :rules="input.rules.join('|')"
             :error="validationErrors[input.inputName]"
         />

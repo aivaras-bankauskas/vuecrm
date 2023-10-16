@@ -5,7 +5,7 @@
     import ButtonComponent from '@/components/button-components/ButtonComponent.vue';
     import ButtonLinkWithText from '@/components/button-components/ButtonLinkWithText.vue';
     import UserInterface from '@/interfaces/UserInterface';
-    import data from './sign-up.json';
+    import data from './sign-in.json';
 
     const FormComponent = defineAsyncComponent(() => import('@/components/form-components/FormComponent.vue'));
 
@@ -34,13 +34,13 @@
                     </div>
                     <div class="pt-5">
                         <ButtonLinkWithText
-                            :text="t('buttons.haveAccount')"
-                            :link-text="t('buttons.signIn')"
-                            to="/sign-in"
+                            :text="t('buttons.dontHaveAccount')"
+                            :link-text="t('buttons.signUp')"
+                            to="/sign-up"
                         />
                     </div>
                 </template>
             </FormComponent>
-        </template>
+        </template>focus
     </CardForm>
 </template>

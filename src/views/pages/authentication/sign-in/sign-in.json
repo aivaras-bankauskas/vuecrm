@@ -1,0 +1,24 @@
+{
+    "config": {
+        "name": "signIn",
+        "API": "/users",
+        "redirect": "/"
+    },
+    "formData": {
+        "firstName": "",
+        "lastName": "",
+        "email": ""
+    },
+    "inputs": [
+        {
+            "inputName": "email",
+            "inputType": "email",
+            "rules": ["required", "email"]
+        },
+        {
+            "inputName": "password",
+            "inputType": "password",
+            "rules": ["required"]
+        }
+    ]
+}

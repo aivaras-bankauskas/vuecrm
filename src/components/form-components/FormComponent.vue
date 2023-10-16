@@ -33,14 +33,14 @@
     let initialFormData: Record<string, unknown> = {};
 
     onMounted(async() => {
-        if (props.urlId) {
-            initialFormData = await getFormData(props.urlId, formData, props.config);
-        }
+        if (props.urlId) initialFormData = await getFormData(props.urlId, formData, props.config);
     });
 
     const submitForm = async (): Promise<void> => {
         await submitFormData(props.urlId, formData, initialFormData, validationErrors, props.config, props.data);
-        router.push(props.config.redirect);
+        if (Object.values(validationErrors).every(error => error === '') && props.config.redirect !== '') {
+            router.push(props.config.redirect);
+        }
     };
 </script>
 
@@ -51,10 +51,7 @@
             :inputs="inputs"
             :validation-errors="validationErrors"
         />
-        <div class="pt-4">
-            <button type="submit" class="flex w-full justify-center rounded-md bg-primary px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign up</button>
-        </div>
+        <slot name="buttons" />
     </form>
 
 </template>
-@/core/handlers/form-handler
