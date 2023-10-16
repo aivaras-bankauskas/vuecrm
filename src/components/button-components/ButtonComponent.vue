@@ -1,20 +1,16 @@
 <script setup lang="ts">
-    import { useI18n } from 'vue-i18n';
-
     defineProps({
-        title: {
+        text: {
             type: String,
             default: ''
         },
+        type: {
+            type: String as () => 'button' | 'submit' | 'reset',
+            default: 'button'
+        },
     });
-
-    const { t } = useI18n({});
 </script>
 
 <template>
-    <button
-        type="submit"
-    >
-        {{ t(`navigation.${title}`) }}
-    </button>
+    <button :type="type">{{ text }}</button>
 </template>
