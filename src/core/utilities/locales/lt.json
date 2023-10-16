@@ -3,7 +3,12 @@
         "production": "Gamyba",
         "team": "Komanda",
         "company": "Įmonė",
-        "settings": "Nustatymai",
+        "settings": "Nustatymai"
+    },
+
+    "buttons": {
+        "haveAccount": "Turite paskyrą?",
+        "dontHaveAccount": "Neturite paskyros?",
         "signIn": "Prisijungti",
         "signUp": "Registruotis",
         "signOut": "Atsijungti"

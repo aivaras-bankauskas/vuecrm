@@ -3,7 +3,12 @@
         "production": "Production",
         "team": "Team",
         "company": "Company",
-        "settings": "Settings",
+        "settings": "Settings"
+    },
+
+    "buttons": {
+        "haveAccount": "Already have an account?",
+        "dontHaveAccount": "Don't have an account?",
         "signIn": "Sign In",
         "signUp": "Sign Up",
         "signOut": "Sign Out"
