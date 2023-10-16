@@ -57,7 +57,7 @@
                     <div class="hidden md:block">
                         <div class="ml-4 flex items-center md:ml-6">
                             <div v-if="isLoggedIn" id="user-desktop-name" class="text-sm cursor-pointer" role="menuitem" @click="toggleUserMenu">Tom Johanson</div>
-                            <RouterLink v-else id="user-desktop-name" to="/sign-in" class="text-sm cursor-pointer">{{ t('navigation.signIn') }}</RouterLink>
+                            <RouterLink v-else id="user-desktop-name" to="/sign-in" class="text-sm cursor-pointer">{{ t('buttons.signIn') }}</RouterLink>
                             <div class="relative ml-3">
                                 <div class="flex items-center">
                                     <button id="user-menu-button" type="button" class="relative flex max-w-xs items-center rounded-full bg-background text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" aria-expanded="false" aria-haspopup="true" @click="toggleUserMenu">
@@ -80,7 +80,7 @@
                                     </div>
                                     <div class="flex justify-between px-4 py-2">
                                         <a id="user-menu-settings" href="#" class="text-sm" role="menuitem" tabindex="-1" @click="toggleUserMenu">{{ t('navigation.settings') }}</a>
-                                        <a id="user-menu-logout" href="#" class="text-sm" role="menuitem" tabindex="-1" @click="toggleUserMenu">{{ t('navigation.signOut') }}</a>
+                                        <a id="user-menu-logout" href="#" class="text-sm" role="menuitem" tabindex="-1" @click="toggleUserMenu">{{ t('buttons.signOut') }}</a>
                                     </div>
                                 </div>
                             </div>
@@ -121,10 +121,10 @@
                     </div>
                     <div v-if="isLoggedIn" class="px-2 pb-3 pt-2 sm:px-3">
                         <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-color hover:text-hover cursor-pointer">{{ t('navigation.settings') }}</a>
-                        <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-color hover:text-hover cursor-pointer">{{ t('navigation.signOut') }}</a>
+                        <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-color hover:text-hover cursor-pointer">{{ t('buttons.signOut') }}</a>
                     </div>
                     <div v-else class="px-2 pb-3 pt-2 sm:px-3">
-                        <RouterLink id="user-desktop-name" to="/sign-in" class="block rounded-md px-3 py-2 text-base font-medium text-color hover:text-hover cursor-pointer">{{ t('navigation.signIn') }}</RouterLink>
+                        <RouterLink id="user-desktop-name" to="/sign-in" class="block rounded-md px-3 py-2 text-base font-medium text-color hover:text-hover cursor-pointer">{{ t('buttons.signIn') }}</RouterLink>
                     </div>
                     <div class="px-2 pb-3 pt-2 sm:px-3">
                         <button :class="{ 'text-hover': locale === 'lt' }" class="w-2 text-center text-sm px-3 cursor-pointer" @click="switchLanguage('lt')">LT</button>
