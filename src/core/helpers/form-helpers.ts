@@ -32,3 +32,9 @@ export const errorMessage = (
     }
     return '';
 };
+
+export const resetForm = (formData: Record<string, string>): void => {
+    for (const field in formData) {
+        formData[field] = '';
+    }
+};
