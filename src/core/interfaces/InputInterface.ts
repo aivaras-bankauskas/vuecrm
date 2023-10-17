@@ -1,7 +1,7 @@
 interface InputInterface {
     inputName: string;
     inputType: string;
-    rules: string | null;
+    rules: string;
 }
 
 export default InputInterface;
