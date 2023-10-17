@@ -27,7 +27,7 @@
         "required": "{inputName} is required",
         "email": "Field {inputName} must be a valid email address",
         "alpha": "Field {inputName} must contain only letters",
-        "min": "Field {inputName} must have at least {count} characters",
-        "max": "Field {inputName} can't have more than {count} characters"
+        "min": "Field {inputName} must have at least {value} characters",
+        "max": "Field {inputName} can't have more than {value} characters"
     }
 }
