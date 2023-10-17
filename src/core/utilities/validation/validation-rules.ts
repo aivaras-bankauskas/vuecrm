@@ -1,5 +1,5 @@
-type ValidationFunctionSingleArg = (value: string) => string;
-type ValidationFunctionDoubleArg = (value: string, param: number) => string;
+export type ValidationFunctionSingleArg = (value: string) => string;
+export type ValidationFunctionDoubleArg = (value: string, param: number) => string;
 
 type ValidationFunction = ValidationFunctionSingleArg | ValidationFunctionDoubleArg;
 

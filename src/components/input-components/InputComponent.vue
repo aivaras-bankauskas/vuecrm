@@ -14,9 +14,17 @@
             type: String,
             default: 'text'
         },
+        label: {
+            type: String,
+            default: ''
+        },
         placeholder: {
             type: String,
             default: ''
+        },
+        required: {
+            type: Boolean,
+            default: false
         },
         errorMessage: {
             type: String,
@@ -41,7 +49,7 @@
 <template>
     <div>
         <label :for="inputName" class="block text-sm font-medium text-color text-start mb-2">
-            {{ inputName }}
+            {{ label }} {{ required ? '*' : '' }}
         </label>
         <div class="relative mt-2 rounded-md shadow-sm">
             <input

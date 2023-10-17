@@ -1,7 +1,10 @@
 <script setup lang="ts">
     import { reactive } from 'vue';
     import type { PropType } from 'vue';
+    import { useI18n } from 'vue-i18n';
     import APIService from '@/core/services/api-service';
+    import validationHandler from '@/core/handlers/validation-handler';
+    import { placeholderAttribute, errorMessage, resetForm } from '@/core/helpers/form-helpers';
     import InputComponent from '../input-components/InputComponent.vue';
     import InputInterface from '@/core/interfaces/InputInterface';
     import ConfigInterface from '@/core/interfaces/ConfigInterface';
@@ -25,40 +28,16 @@
         }
     });
 
+    const { t, te } = useI18n();
     const formData = reactive<Record<string, string>>(props.data as Record<string, string>);
-    const validationRules = reactive(Object.fromEntries(props.inputs.map(input => [input.inputName, input.rules])));
+    const validationErrors = reactive(Object.fromEntries(props.inputs.map(input => [input.inputName, input.rules])));
     const errors = reactive<Record<string, string>>({});
-
-    const validateField = (field: string, value: string): string => {
-        const rules = validationRules[field].split('|');
-        let errorMessage: string = '';
-
-        for (const rule of rules) {
-            const [ruleName, ruleValue] = rule.split(':');
-
-            if (ruleName === 'required' && !value) {
-                errorMessage = `${field} is required`;
-                break;
-            } else if (ruleName === 'min' && value.length < parseInt(ruleValue)) {
-                errorMessage = `${field} must be at least ${ruleValue} characters`;
-                break;
-            } else if (ruleName === 'alpha' && !/^[a-zA-Z]+$/.test(value)) {
-                errorMessage = `${field} must contain only alphabetic characters`;
-                break;
-            } else if (ruleName === 'email' && !/\S+@\S+\.\S+/.test(value)) {
-                errorMessage = 'Invalid email format';
-                break;
-            }
-        }
-
-        return errorMessage;
-    };
 
     const submitForm = async (): Promise<void> => {
         let isValid = true;
 
         Object.keys(formData).forEach(field => {
-            const fieldErrors = validateField(field, formData[field] as string);
+            const fieldErrors = validationHandler(field, formData[field] as string, validationErrors);
 
             if (fieldErrors.length > 0) {
                 isValid = false;
@@ -68,15 +47,12 @@
 
         if (isValid) {
             await APIService.store(props.config.API, formData);
-            resetForm();
+            resetForm(formData);
         }
     };
 
-    const resetForm = (): void => {
-        for (const field in formData) {
-            formData[field] = '';
-        }
-    };
+    const getPlaceholderAttribute = (inputName: string): string => placeholderAttribute(inputName, t, te);
+    const getErrorMessage = (inputName: string, error: string): string => errorMessage(inputName, error, t);
 </script>
 
 <template>
@@ -87,8 +63,10 @@
                 v-model="formData[input.inputName]"
                 :input-name="input.inputName"
                 :input-type="input.inputType"
-                :placeholder="input.inputName"
-                :error-message="errors[input.inputName]"
+                :label="t(`labels.${input.inputName}`)"
+                :placeholder="getPlaceholderAttribute(input.inputName)"
+                :required="input.rules !== ''"
+                :error-message="getErrorMessage(input.inputName, errors[input.inputName])"
             />
         </div>
         <slot name="buttons" />
