@@ -19,7 +19,7 @@
         <template #card-form-body>
             <FormComponent
                 class="space-y-4 mt-10"
-                :url-id="2"
+                :url-id="null"
                 :config="data.config"
                 :data="formData"
                 :inputs="data.inputs"
