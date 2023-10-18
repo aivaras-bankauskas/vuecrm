@@ -30,16 +30,20 @@
 
     const { t, te } = useI18n();
     const formData = reactive<Record<string, string>>(props.data as Record<string, string>);
+    const initialFormData = reactive<Record<string, string>>({});
     const validationErrors = reactive(Object.fromEntries(props.inputs.map(input => [input.inputName, input.rules])));
     const errors = reactive<Record<string, string>>({});
 
     onMounted(() => {
-        if (props.urlId) getFormData(props.urlId, props.config.API);
+        if (props.urlId) {
+            getFormData(props.urlId, props.config.API);
+        }
     });
 
     const getFormData = async (id: number, endpoint: string ): Promise<void> => {
         const response = await APIService.get(endpoint, id);
         Object.assign(formData, response.data);
+        Object.assign(initialFormData, response.data);
         return { ...response.data };
     };
 
@@ -58,13 +62,18 @@
             }
         });
 
+        const initialFormDataStr: string = JSON.stringify(initialFormData);
+        const currentFormDataStr: string = JSON.stringify(formData);
+
+        const hasChanged: boolean = initialFormDataStr !== currentFormDataStr;
+
         if (isValid) {
-            if (props.urlId) {
-                await APIService.update(props.config.API, props.urlId, formData);
-            }
-            else {
+            if (!props.urlId) {
                 await APIService.store(props.config.API, formData);
                 resetForm(formData);
+            } else if (hasChanged) {
+                await APIService.update(props.config.API, props.urlId, formData);
+                getFormData(props.urlId, props.config.API);
             }
         }
     };
