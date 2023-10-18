@@ -13,7 +13,7 @@
         {
             "inputName": "firstName",
             "inputType": "text",
-            "rules": "required|alpha|min:6"
+            "rules": "required|alpha|min:4"
         },
         {
             "inputName": "lastName",
