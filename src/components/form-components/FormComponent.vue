@@ -16,7 +16,7 @@
     }>();
 
     const { t, te } = useI18n();
-    const formData = reactive<Record<string, string>>(props.data as Record<string, string>);
+    const formData = reactive(props.data as Record<string, string>);
     const initialFormData = reactive<Record<string, string>>({});
     const validationErrors = reactive(Object.fromEntries(props.inputs.map(input => [input.inputName, input.rules])));
     const errors = reactive<Record<string, string>>({});
@@ -32,22 +32,21 @@
     };
 
     const submitForm = async (): Promise<void> => {
-        let isValid: boolean = true;
+        let isValid = true;
         const excludedFields: string[] = props.urlId ? ['id'] : [];
 
-        Object.keys(formData).forEach(field => {
-            if (!excludedFields.includes(field)) {
-                const fieldErrors: string = validationHandler(field, formData[field] as string, validationErrors);
+        for (const field of Object.keys(formData)) {
+            if (excludedFields.includes(field)) continue;
 
-                if (fieldErrors.length > 0) {
-                    isValid = false;
-                }
-                errors[field] = fieldErrors;
+            const fieldErrors = validationHandler(field, formData[field], validationErrors);
+            if (fieldErrors) {
+                isValid = false;
             }
-        });
+            errors[field] = fieldErrors;
+        }
 
         if (isValid) {
-            const endpoint: string = props.config.API;
+            const endpoint = props.config.API;
 
             if (!props.urlId) {
                 await APIService.store(endpoint, formData);
