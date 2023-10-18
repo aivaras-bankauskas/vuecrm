@@ -1,5 +1,5 @@
 import APIService from '@/core/services/api-service';
-import validationHandler from '@/core/handlers/validation-handler';
+import validateFormData from '@/core/handlers/validation-handler';
 import ConfigInterface from '@/core/interfaces/ConfigInterface';
 
 export const getFormData = async (
@@ -21,27 +21,21 @@ export const submitFormData = async (
     config: ConfigInterface,
     errors: Record<string, string>
 ): Promise<void> => {
-    let isValid = true;
     const excludedFields = id ? ['id'] : [];
 
-    for (const field of Object.keys(formData)) {
-        if (excludedFields.includes(field)) continue;
+    const isValid = validateFormData(formData, validationErrors, excludedFields, errors);
 
-        const fieldErrors = validationHandler(field, formData[field], validationErrors);
-        if (fieldErrors) {
-            isValid = false;
-        }
-        errors[field] = fieldErrors;
+    if (!isValid) return;
+
+    if (!id) {
+        await APIService.store(config.API, formData);
+        resetForm(formData);
+        return;
     }
 
-    if (isValid) {
-        if (!id) {
-            await APIService.store(config.API, formData);
-            resetForm(formData);
-        } else if (JSON.stringify(initialFormData) !== JSON.stringify(formData)) {
-            await APIService.update(config.API, id, formData);
-            getFormData(id, config.API, formData, initialFormData);
-        }
+    if (JSON.stringify(initialFormData) !== JSON.stringify(formData)) {
+        await APIService.update(config.API, id, formData);
+        getFormData(id, config.API, formData, initialFormData);
     }
 };
 

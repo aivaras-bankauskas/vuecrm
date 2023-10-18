@@ -1,5 +1,26 @@
 import validationRules, { ValidationFunctionSingleArg, ValidationFunctionDoubleArg } from '@/core/utilities/validation/validation-rules';
 
+const validateFormData = (
+    formData: Record<string, string>,
+    validationErrors: Record<string, string>,
+    excludedFields: string[],
+    errors: Record<string, string>
+): boolean => {
+    let isValid = true;
+
+    for (const field of Object.keys(formData)) {
+        if (excludedFields.includes(field)) continue;
+
+        const fieldErrors = validationHandler(field, formData[field], validationErrors);
+        if (fieldErrors) {
+            isValid = false;
+        }
+        errors[field] = fieldErrors;
+    }
+
+    return isValid;
+};
+
 const validationHandler = (field: string, value: string, validationErrors: { [k: string]: string; }): string => {
     const rules = validationErrors[field].split('|');
     let errorMessage: string = '';
@@ -26,4 +47,4 @@ const validationHandler = (field: string, value: string, validationErrors: { [k:
     return errorMessage;
 };
 
-export default validationHandler;
+export default validateFormData;
