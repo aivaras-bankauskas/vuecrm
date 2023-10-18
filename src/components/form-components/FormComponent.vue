@@ -46,8 +46,13 @@
         });
 
         if (isValid) {
-            await APIService.store(props.config.API, formData);
-            resetForm(formData);
+            if (props.urlId) {
+                await APIService.update(props.config.API, props.urlId, formData);
+            }
+            else {
+                await APIService.store(props.config.API, formData);
+                resetForm(formData);
+            }
         }
     };
 
