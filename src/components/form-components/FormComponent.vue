@@ -1,6 +1,5 @@
 <script setup lang="ts">
     import { onMounted, reactive } from 'vue';
-    import type { PropType } from 'vue';
     import { useI18n } from 'vue-i18n';
     import APIService from '@/core/services/api-service';
     import validationHandler from '@/core/handlers/validation-handler';
@@ -9,24 +8,12 @@
     import InputInterface from '@/core/interfaces/InputInterface';
     import ConfigInterface from '@/core/interfaces/ConfigInterface';
 
-    const props = defineProps({
-        urlId: {
-            type: Number as PropType<number | null>,
-            default: null
-        },
-        config: {
-            type: Object as PropType<ConfigInterface>,
-            required: true
-        },
-        data: {
-            type: Object as PropType<Record<string, unknown>>,
-            required: true
-        },
-        inputs: {
-            type: Array as PropType<InputInterface[]>,
-            required: true
-        }
-    });
+    const props = defineProps<{
+        urlId?: number | null;
+        config: ConfigInterface;
+        data: Record<string, unknown>;
+        inputs: InputInterface[];
+    }>();
 
     const { t, te } = useI18n();
     const formData = reactive<Record<string, string>>(props.data as Record<string, string>);
@@ -35,16 +22,13 @@
     const errors = reactive<Record<string, string>>({});
 
     onMounted(() => {
-        if (props.urlId) {
-            getFormData(props.urlId, props.config.API);
-        }
+        props.urlId && getFormData(props.urlId, props.config.API);
     });
 
-    const getFormData = async (id: number, endpoint: string ): Promise<void> => {
+    const getFormData = async (id: number, endpoint: string): Promise<void> => {
         const response = await APIService.get(endpoint, id);
         Object.assign(formData, response.data);
         Object.assign(initialFormData, response.data);
-        return { ...response.data };
     };
 
     const submitForm = async (): Promise<void> => {
@@ -62,18 +46,15 @@
             }
         });
 
-        const initialFormDataStr: string = JSON.stringify(initialFormData);
-        const currentFormDataStr: string = JSON.stringify(formData);
-
-        const hasChanged: boolean = initialFormDataStr !== currentFormDataStr;
-
         if (isValid) {
+            const endpoint: string = props.config.API;
+
             if (!props.urlId) {
-                await APIService.store(props.config.API, formData);
+                await APIService.store(endpoint, formData);
                 resetForm(formData);
-            } else if (hasChanged) {
-                await APIService.update(props.config.API, props.urlId, formData);
-                getFormData(props.urlId, props.config.API);
+            } else if (JSON.stringify(initialFormData) !== JSON.stringify(formData)) {
+                await APIService.update(endpoint, props.urlId, formData);
+                getFormData(props.urlId, endpoint);
             }
         }
     };
@@ -92,11 +73,10 @@
                 :input-type="input.inputType"
                 :label="t(`labels.${input.inputName}`)"
                 :placeholder="getPlaceholderAttribute(input.inputName)"
-                :required="input.rules !== ''"
+                :required="!!input.rules"
                 :error-message="getErrorMessage(input.inputName, errors[input.inputName])"
             />
         </div>
         <slot name="buttons" />
     </form>
-
 </template>
