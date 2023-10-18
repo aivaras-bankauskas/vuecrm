@@ -1,48 +1,52 @@
 import APIService from '@/core/services/api-service';
-import validationHandler from '@/core/utilities/validation/validation-hendler';
+import validationHandler from '@/core/handlers/validation-handler';
 import ConfigInterface from '@/core/interfaces/ConfigInterface';
 
 export const getFormData = async (
-    urlId: number | null,
-    formData: Record<string, unknown>,
-    config: ConfigInterface
-): Promise<Record<string, unknown>> => {
-    if (urlId) {
-        const existingData = await APIService.get(config.API, urlId);
-        Object.assign(formData, existingData.data);
-        return { ...existingData.data };
-    }
-    return {};
+    id: number,
+    endpoint: string,
+    formData: Record<string, string>,
+    initialFormData: Record<string, string>
+): Promise<void> => {
+    const response = await APIService.get(endpoint, id);
+    Object.assign(formData, response.data);
+    Object.assign(initialFormData, response.data);
 };
 
 export const submitFormData = async (
-    urlId: number | null,
-    formData: Record<string, unknown>,
-    initialFormData: Record<string, unknown>,
-    validationErrors: Record<string, unknown>,
+    id: number,
+    formData: Record<string, string>,
+    initialFormData: Record<string, string>,
+    validationErrors: Record<string, string>,
     config: ConfigInterface,
-    data: Record<string, unknown>
+    errors: Record<string, string>
 ): Promise<void> => {
-    const formElement = document.querySelector('form');
-    const [isValid, errors] = validationHandler.validateFormData(formElement);
+    let isValid = true;
+    const excludedFields = id ? ['id'] : [];
 
-    for (const key of Object.keys(validationErrors)) {
-        validationErrors[key] = '';
+    for (const field of Object.keys(formData)) {
+        if (excludedFields.includes(field)) continue;
+
+        const fieldErrors = validationHandler(field, formData[field], validationErrors);
+        if (fieldErrors) {
+            isValid = false;
+        }
+        errors[field] = fieldErrors;
     }
 
-    const initialFormDataStr = JSON.stringify(initialFormData);
-    const currentFormDataStr = JSON.stringify(formData);
-    const hasChanged = initialFormDataStr !== currentFormDataStr;
-
     if (isValid) {
-        if (!urlId) {
+        if (!id) {
             await APIService.store(config.API, formData);
-            Object.assign(formData, data);
-        } else if (hasChanged) {
-            await APIService.update(config.API, urlId, formData);
-            Object.assign(initialFormData, formData);
+            resetForm(formData);
+        } else if (JSON.stringify(initialFormData) !== JSON.stringify(formData)) {
+            await APIService.update(config.API, id, formData);
+            getFormData(id, config.API, formData, initialFormData);
         }
-    } else {
-        Object.assign(validationErrors, errors);
+    }
+};
+
+const resetForm = (formData: Record<string, string>): void => {
+    for (const field in formData) {
+        formData[field] = '';
     }
 };

@@ -1,17 +1,16 @@
 <script setup lang="ts">
     import { onMounted, reactive } from 'vue';
     import { useI18n } from 'vue-i18n';
-    import APIService from '@/core/services/api-service';
-    import validationHandler from '@/core/handlers/validation-handler';
-    import { placeholderAttribute, errorMessage, resetForm } from '@/core/helpers/form-helpers';
+    import { getFormData, submitFormData } from '@/core/handlers/form-handler';
+    import { placeholderAttribute, errorMessage } from '@/core/helpers/form-helpers';
     import InputComponent from '../input-components/InputComponent.vue';
     import InputInterface from '@/core/interfaces/InputInterface';
     import ConfigInterface from '@/core/interfaces/ConfigInterface';
 
     const props = defineProps<{
-        urlId?: number | null;
+        urlId: number | null;
         config: ConfigInterface;
-        data: Record<string, unknown>;
+        data: unknown;
         inputs: InputInterface[];
     }>();
 
@@ -22,39 +21,11 @@
     const errors = reactive<Record<string, string>>({});
 
     onMounted(() => {
-        props.urlId && getFormData(props.urlId, props.config.API);
+        props.urlId && getFormData(props.urlId, props.config.API, formData, initialFormData);
     });
 
-    const getFormData = async (id: number, endpoint: string): Promise<void> => {
-        const response = await APIService.get(endpoint, id);
-        Object.assign(formData, response.data);
-        Object.assign(initialFormData, response.data);
-    };
-
     const submitForm = async (): Promise<void> => {
-        let isValid = true;
-        const excludedFields = props.urlId ? ['id'] : [];
-
-        for (const field of Object.keys(formData)) {
-            if (excludedFields.includes(field)) continue;
-
-            const fieldErrors = validationHandler(field, formData[field], validationErrors);
-            if (fieldErrors) {
-                isValid = false;
-            }
-            errors[field] = fieldErrors;
-        }
-
-        if (isValid) {
-            const endpoint = props.config.API;
-            if (!props.urlId) {
-                await APIService.store(endpoint, formData);
-                resetForm(formData);
-            } else if (JSON.stringify(initialFormData) !== JSON.stringify(formData)) {
-                await APIService.update(endpoint, props.urlId, formData);
-                getFormData(props.urlId, endpoint);
-            }
-        }
+        submitFormData(props.urlId as number, formData, initialFormData, validationErrors, props.config, errors);
     };
 
     const getPlaceholderAttribute = (inputName: string): string => placeholderAttribute(inputName, t, te);
