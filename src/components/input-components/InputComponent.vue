@@ -2,7 +2,7 @@
     import { computed, defineEmits, ref } from 'vue';
     import IconComponent from '../icon-components/IconComponent.vue';
 
-    const props = defineProps<{
+    const props = withDefaults(defineProps<{
         modelValue: string | number | boolean | unknown[];
         inputName: string;
         inputType: string;
@@ -10,7 +10,9 @@
         placeholder: string;
         required: boolean;
         errorMessage: string;
-    }>();
+    }>(), {
+        required: false,
+    });
 
     const emit = defineEmits(['update:modelValue']);
     const inputType = ref(props.inputType);

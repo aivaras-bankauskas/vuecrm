@@ -1,10 +1,7 @@
 <script setup lang="ts">
-    defineProps({
-        src: {
-            type: String,
-            default: ''
-        }
-    });
+    defineProps<{
+        src: string;
+    }>();
 </script>
 
 <template>
