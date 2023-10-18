@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { reactive } from 'vue';
+    import { onMounted, reactive } from 'vue';
     import type { PropType } from 'vue';
     import { useI18n } from 'vue-i18n';
     import APIService from '@/core/services/api-service';
@@ -33,16 +33,29 @@
     const validationErrors = reactive(Object.fromEntries(props.inputs.map(input => [input.inputName, input.rules])));
     const errors = reactive<Record<string, string>>({});
 
+    onMounted(() => {
+        if (props.urlId) getFormData(props.urlId, props.config.API);
+    });
+
+    const getFormData = async (id: number, endpoint: string ): Promise<void> => {
+        const response = await APIService.get(endpoint, id);
+        Object.assign(formData, response.data);
+        return { ...response.data };
+    };
+
     const submitForm = async (): Promise<void> => {
-        let isValid = true;
+        let isValid: boolean = true;
+        const excludedFields: string[] = props.urlId ? ['id'] : [];
 
         Object.keys(formData).forEach(field => {
-            const fieldErrors = validationHandler(field, formData[field] as string, validationErrors);
+            if (!excludedFields.includes(field)) {
+                const fieldErrors: string = validationHandler(field, formData[field] as string, validationErrors);
 
-            if (fieldErrors.length > 0) {
-                isValid = false;
+                if (fieldErrors.length > 0) {
+                    isValid = false;
+                }
+                errors[field] = fieldErrors;
             }
-            errors[field] = fieldErrors;
         });
 
         if (isValid) {
