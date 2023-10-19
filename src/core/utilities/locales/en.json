@@ -9,8 +9,8 @@
     "buttons": {
         "haveAccount": "Already have an account?",
         "dontHaveAccount": "Don't have an account?",
+        "signup": "Sign Up",
         "signIn": "Sign In",
-        "signUp": "Sign Up",
         "signOut": "Sign Out"
     },
     

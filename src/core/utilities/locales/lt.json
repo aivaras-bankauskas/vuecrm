@@ -9,8 +9,8 @@
     "buttons": {
         "haveAccount": "Turite paskyrą?",
         "dontHaveAccount": "Neturite paskyros?",
+        "signup": "Registruotis",
         "signIn": "Prisijungti",
-        "signUp": "Registruotis",
         "signOut": "Atsijungti"
     },
 

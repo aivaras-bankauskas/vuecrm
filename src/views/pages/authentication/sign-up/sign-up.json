@@ -1,6 +1,6 @@
 {
     "config": {
-        "name": "signUp",
+        "name": "signup",
         "API": "/users",
         "redirect": "/users"
     },
