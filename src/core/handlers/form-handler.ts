@@ -20,23 +20,25 @@ export const submitFormData = async (
     validationErrors: Record<string, string>,
     config: ConfigInterface,
     errors: Record<string, string>
-): Promise<void> => {
+): Promise<boolean> => {
     const excludedFields = id ? ['id'] : [];
 
     const isValid = validateFormData(formData, validationErrors, excludedFields, errors);
 
-    if (!isValid) return;
+    if (!isValid) return false;
 
     if (!id) {
         await APIService.store(config.API, formData);
         resetForm(formData);
-        return;
+        return true;
     }
 
     if (JSON.stringify(initialFormData) !== JSON.stringify(formData)) {
         await APIService.update(config.API, id, formData);
         getFormData(id, config.API, formData, initialFormData);
+        return true;
     }
+    return true;
 };
 
 const resetForm = (formData: Record<string, string>): void => {
