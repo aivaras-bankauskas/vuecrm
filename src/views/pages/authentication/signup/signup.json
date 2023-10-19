@@ -7,7 +7,8 @@
     "formData": {
         "firstName": "",
         "lastName": "",
-        "email": ""
+        "email": "",
+        "password": ""
     },
     "inputs": [
         {
@@ -24,6 +25,11 @@
             "inputName": "email",
             "inputType": "email",
             "rules": "required|email"
+        },
+        {
+            "inputName": "password",
+            "inputType": "password",
+            "rules": "required|password|min:6"
         }
     ]
 }
