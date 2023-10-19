@@ -13,12 +13,12 @@
         {
             "inputName": "email",
             "inputType": "email",
-            "rules": ["required", "email"]
+            "rules": "required|email"
         },
         {
             "inputName": "password",
             "inputType": "password",
-            "rules": ["required"]
+            "rules": "required|password|min:6"
         }
     ]
 }
