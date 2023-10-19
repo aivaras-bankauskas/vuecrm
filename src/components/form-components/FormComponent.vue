@@ -6,6 +6,7 @@
     import InputComponent from '../input-components/InputComponent.vue';
     import InputInterface from '@/core/interfaces/InputInterface';
     import ConfigInterface from '@/core/interfaces/ConfigInterface';
+    import router from '@/router';
 
     const props = defineProps<{
         urlId: number | null;
@@ -25,7 +26,8 @@
     });
 
     const submitForm = async (): Promise<void> => {
-        submitFormData(props.urlId as number, formData, initialFormData, validationErrors, props.config, errors);
+        const isFormSubmitted = await submitFormData(props.urlId as number, formData, initialFormData, validationErrors, props.config, errors);
+        if (isFormSubmitted) router.push(props.config.redirect as string);
     };
 
     const getPlaceholderAttribute = (inputName: string): string => placeholderAttribute(inputName, t, te);
