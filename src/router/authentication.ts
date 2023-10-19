@@ -4,7 +4,7 @@ const authentication = [
     {
         path: '/signup',
         name: 'signup',
-        component: (): Promise<Component> => import('@/views/pages/authentication/sign-up/SignupPage.vue')
+        component: (): Promise<Component> => import('@/views/pages/authentication/signup/SignupPage.vue')
     },
     {
         path: '/sign-in',
