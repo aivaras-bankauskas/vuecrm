@@ -2,11 +2,10 @@
     import Hamburger from '@/assets/icons/hamburger.svg';
     import Close from '@/assets/icons/close.svg';
 
-    defineProps({
-        isMenuOpen: {
-            type: Boolean,
-            default: false
-        }
+    withDefaults(defineProps<{
+        isMenuOpen: boolean;
+    }>(), {
+        isMenuOpen: false
     });
 </script>
 

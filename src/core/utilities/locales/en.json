@@ -9,8 +9,8 @@
     "buttons": {
         "haveAccount": "Already have an account?",
         "dontHaveAccount": "Don't have an account?",
+        "signup": "Sign Up",
         "signIn": "Sign In",
-        "signUp": "Sign Up",
         "signOut": "Sign Out"
     },
     
@@ -23,11 +23,11 @@
     },
 
     "errors": {
-        "password": "{{inputName}} must include at least one letter and one number",
-        "required": "{{inputName}} is required",
-        "email": "Field {{inputName}} must be a valid email address",
-        "alpha": "Field {{inputName}} must contain only letters",
-        "min": "Field {{inputName}} must have at least {{count}} characters",
-        "max": "Field {{inputName}} can't have more than {{count}} characters"
+        "password": "{inputName} must include at least one letter and one number",
+        "required": "{inputName} is required",
+        "email": "Field {inputName} must be a valid email address",
+        "alpha": "Field {inputName} must contain only letters",
+        "min": "Field {inputName} must have at least {value} characters",
+        "max": "Field {inputName} can't have more than {value} characters"
     }
 }

@@ -9,8 +9,8 @@
     "buttons": {
         "haveAccount": "Turite paskyrą?",
         "dontHaveAccount": "Neturite paskyros?",
+        "signup": "Registruotis",
         "signIn": "Prisijungti",
-        "signUp": "Registruotis",
         "signOut": "Atsijungti"
     },
 
@@ -23,9 +23,11 @@
     },
 
     "errors": {
-        "password": "Laukelyje {{inputName}} privaloma naudoti bent vieną skaičių ir raidę",
-        "required": "Laukelis {{inputName}} yra privalomas",
-        "email": "Laukelis {{inputName}} turi būti el. pašto adresas",
-        "alpha": "Laukelyje {{inputName}} galima naudoti tik raides"
+        "password": "Laukelyje {inputName} privaloma naudoti bent vieną skaičių ir raidę",
+        "required": "Laukelis {inputName} yra privalomas",
+        "email": "Laukelis {inputName} turi būti el. pašto adresas",
+        "alpha": "Laukelyje {inputName} galima naudoti tik raides",
+        "min": "Laukelis {inputName} turi turėti bent {value} simbolius",
+        "max": "Laukelis {inputName} turi turėti ne daugiau kaip {value} simbolius"
     }
 }

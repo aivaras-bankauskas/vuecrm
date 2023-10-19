@@ -1,5 +1,5 @@
 interface UserInterface {
-    [key: string]: string | undefined;
+    id?: number;
     firstName: string;
     lastName: string;
     email: string;

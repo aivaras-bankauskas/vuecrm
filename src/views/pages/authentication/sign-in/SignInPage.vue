@@ -35,8 +35,8 @@
                     <div class="pt-5">
                         <ButtonLinkWithText
                             :text="t('buttons.dontHaveAccount')"
-                            :link-text="t('buttons.signUp')"
-                            to="/sign-up"
+                            :link-text="t('buttons.signup')"
+                            to="/signup"
                         />
                     </div>
                 </template>

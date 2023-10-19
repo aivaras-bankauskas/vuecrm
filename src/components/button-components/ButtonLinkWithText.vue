@@ -1,18 +1,9 @@
 <script setup lang="ts">
-    defineProps({
-        text: {
-            type: String,
-            default: ''
-        },
-        linkText: {
-            type: String,
-            default: ''
-        },
-        to: {
-            type: String,
-            default: ''
-        }
-    });
+    defineProps<{
+        text: string;
+        linkText: string;
+        to: string;
+    }>();
 </script>
 <template>
     <div>
