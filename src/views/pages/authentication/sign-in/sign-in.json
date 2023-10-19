@@ -5,9 +5,8 @@
         "redirect": "/"
     },
     "formData": {
-        "firstName": "",
-        "lastName": "",
-        "email": ""
+        "email": "",
+        "password": ""
     },
     "inputs": [
         {
