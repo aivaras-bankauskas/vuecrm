@@ -1,6 +1,7 @@
 interface MenuInterface {
     name: string;
     vue: string;
+    auth: boolean;
   }
 
   interface NavigationInterface {

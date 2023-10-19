@@ -3,19 +3,22 @@
         {
             "menuItem": {
                 "name": "production",
-                "vue": "ProductionPage"
+                "vue": "ProductionPage",
+                "auth": true
             }
         },
         {
             "menuItem": {
                 "name": "team",
-                "vue": "TeamPage"
+                "vue": "TeamPage",
+                "auth": true
             }
         },
         {
             "menuItem": {
                 "name": "company",
-                "vue": "CompanyPage"
+                "vue": "CompanyPage",
+                "auth": false
             }
         }
     ]

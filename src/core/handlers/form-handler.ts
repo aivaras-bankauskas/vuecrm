@@ -1,6 +1,7 @@
 import APIService from '@/core/services/api-service';
 import validateFormData from '@/core/handlers/validation-handler';
 import ConfigInterface from '@/core/interfaces/ConfigInterface';
+import AuthService from '../services/auth-service';
 
 export const getFormData = async (
     id: number,
@@ -28,7 +29,12 @@ export const submitFormData = async (
     if (!isValid) return false;
 
     if (!id) {
-        await APIService.store(config.API, formData);
+        const response = await APIService.store(config.API, formData);
+
+        if (config.name === 'signup' && typeof response.data.id === 'number') {
+            AuthService.signup(response.data.id, '10s');
+        }
+
         resetForm(formData);
         return true;
     }

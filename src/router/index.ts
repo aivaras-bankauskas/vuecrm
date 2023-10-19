@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import { Component } from 'vue';
+import { requireAuth } from './route-guards';
 import authentication from './authentication';
 import { navigationItems } from '@/views/layout/navigation.json';
 import  NavigationInterface from '@/interfaces/NavigationInterface';
@@ -17,14 +18,17 @@ routes.push(...authentication);
 
 // Add routes from navigation
 navigationItems.forEach((item: NavigationInterface): void => {
-    const { name, vue } = item.menuItem;
+    const { name, vue, auth  } = item.menuItem;
     routes.push({
         name,
         path: `/${name}/:id?`,
         component: (): Promise<Component> =>
             import(`@/views/pages/${vue}.vue`).catch(() => {
                 return import('@/views/pages/NotFound.vue');
-            })
+            }),
+        meta: {
+            requiresAuth: auth
+        }
     });
 });
 
@@ -41,5 +45,7 @@ const router = createRouter({
     history: createWebHistory('/'),
     routes
 });
+
+router.beforeEach(requireAuth);
 
 export default router;
