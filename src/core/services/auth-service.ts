@@ -1,10 +1,30 @@
-// For TESTING purposes only. Needs to be replaced with BACKEND logic
-export default class AuthService {
-    static signup(id: number, expiration: string): void {
-        const token = `some-very-secret-token-${id}`;
+import APIService from '@/core/services/api-service';
 
-        let expires;
-        switch (expiration) {
+export default class AuthService {
+    static async signup(id: number, expiration: string): Promise<void> {
+        const token = `some-very-secret-token-${id}`;
+        AuthService.storeToken(token, expiration);
+    }
+
+    static async signIn(email: string, password: string): Promise<boolean> {
+        const users = await APIService.getAll('/users');
+        const user = users.data.find((user: Record<string, string>) => user.email === email && user.password === password);
+
+        if (user) {
+            const token = `some-very-secret-token-${user.id}`;
+            AuthService.storeToken(token, '1h');
+            console.log('Sign in successful.');
+            return true;
+        } else {
+            console.log('Invalid email or password.');
+            return false;
+        }
+    }
+
+    static storeToken(token: string, expiresIn: string): void {
+        let expires: number;
+
+        switch (expiresIn) {
             case '10s':
                 expires = new Date().getTime() + 10000;
                 break;
@@ -26,20 +46,12 @@ export default class AuthService {
     }
 
     static isTokenExpired(): boolean {
-        const storedUser = localStorage.getItem('user');
+        const storedUser = localStorage.getItem('userToken');
         if (storedUser) {
             const { expires } = JSON.parse(storedUser);
             const currentTime = new Date().getTime();
             return currentTime > expires;
         }
         return true;
-    }
-
-    signIn(): void {
-        if (AuthService.isTokenExpired()) {
-            console.log('Token is expired, please sign in again.');
-        } else {
-            console.log('Token is valid, proceed with sign in.');
-        }
     }
 }
