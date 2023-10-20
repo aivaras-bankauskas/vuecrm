@@ -10,7 +10,7 @@ const routes: RouteRecordRaw[] = [];
 // Redirect to production page
 routes.push({
     path: '/',
-    redirect: '/production'
+    redirect: '/company'
 });
 
 // Add routes from authentication
