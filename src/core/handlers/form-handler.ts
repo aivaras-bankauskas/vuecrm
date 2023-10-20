@@ -1,7 +1,7 @@
 import APIService from '@/core/services/api-service';
 import validateFormData from '@/core/handlers/validation-handler';
 import ConfigInterface from '@/core/interfaces/ConfigInterface';
-import AuthService from '../services/auth-service';
+import AuthService from '@/core/services/auth-service';
 
 export const getFormData = async (
     id: number,
