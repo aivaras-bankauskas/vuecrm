@@ -21,6 +21,10 @@ export default class AuthService {
         }
     }
 
+    static signOut(): void {
+        localStorage.removeItem('userToken');
+    }
+
     static storeToken(token: string, expiresIn: string): void {
         let expires: number;
 
