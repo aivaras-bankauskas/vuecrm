@@ -13,10 +13,8 @@ export default class AuthService {
         if (user) {
             const token = `some-very-secret-token-${user.id}`;
             AuthService.storeToken(token, '1h');
-            console.log('Sign in successful.');
             return true;
         } else {
-            console.log('Invalid email or password.');
             return false;
         }
     }
