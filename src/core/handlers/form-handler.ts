@@ -44,7 +44,7 @@ export const submitFormData = async (
         const response = await APIService.store(config.API, formData);
 
         if (config.name === 'signup' && typeof response.data.id === 'number') {
-            AuthService.signup(response.data.id, '10s');
+            AuthService.signup(response.data.id);
         }
 
         resetForm(formData);

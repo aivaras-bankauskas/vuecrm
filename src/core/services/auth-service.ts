@@ -1,9 +1,9 @@
 import APIService from '@/core/services/api-service';
 
 export default class AuthService {
-    static async signup(id: number, expiration: string): Promise<void> {
-        const token = `some-very-secret-token-${id}`;
-        AuthService.storeToken(token, expiration);
+    static async signup(id: number): Promise<void> {
+        const token = 'some-very-secret-token';
+        AuthService.storeToken(id, token, '1h');
     }
 
     static async signIn(email: string, password: string): Promise<boolean> {
@@ -11,8 +11,8 @@ export default class AuthService {
         const user = users.data.find((user: Record<string, string>) => user.email === email && user.password === password);
 
         if (user) {
-            const token = `some-very-secret-token-${user.id}`;
-            AuthService.storeToken(token, '1h');
+            const token = 'some-very-secret-token';
+            AuthService.storeToken(user.id, token, '1h');
             return true;
         } else {
             return false;
@@ -23,7 +23,7 @@ export default class AuthService {
         localStorage.removeItem('userToken');
     }
 
-    static storeToken(token: string, expiresIn: string): void {
+    static storeToken(id: number, token: string, expiresIn: string): void {
         let expires: number;
 
         switch (expiresIn) {
@@ -43,7 +43,7 @@ export default class AuthService {
                 throw new Error('Invalid expiration time');
         }
 
-        const user = { token, expires };
+        const user = { id, token, expires };
         localStorage.setItem('userToken', JSON.stringify(user));
     }
 
