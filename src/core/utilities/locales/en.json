@@ -25,6 +25,7 @@
 
     "errors": {
         "password": "{inputName} must include at least one letter and one number",
+        "confirmPassword": "Passwords don't match",
         "required": "{inputName} is required",
         "email": "Field {inputName} must be a valid email address",
         "alpha": "Field {inputName} must contain only letters",
