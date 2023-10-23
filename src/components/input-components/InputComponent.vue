@@ -32,7 +32,7 @@
 
     const toggleEye = (): void => {
         isEyeOpen.value = !isEyeOpen.value;
-        if (props.inputName === 'password') {
+        if (props.inputName === 'password' || props.inputName === 'confirmPassword') {
             inputType.value = !isEyeOpen.value ? 'password' : 'text';
         }
     };
@@ -55,7 +55,7 @@
                 @input="updateValue"
             >
             <div class="absolute inset-y-0 right-1 flex items-center p-1" @click="toggleEye">
-                <div v-if="inputName === 'password'">
+                <div v-if="inputName === 'password' || inputName === 'confirmPassword'">
                     <IconComponent v-if="!isEyeOpen" src="src/assets/icons/eye-close.svg" class="h-6 w-auto text-gray-light cursor-pointer" />
                     <IconComponent v-else src="src/assets/icons/eye-open.svg" class="h-6 w-auto text-gray-light cursor-pointer" />
                 </div>

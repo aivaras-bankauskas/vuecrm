@@ -1,4 +1,8 @@
-import validationRules, { ValidationFunctionSingleArg, ValidationFunctionDoubleArg } from '@/core/utilities/validation/validation-rules';
+import validationRules, {
+    ValidationFunctionSingleArg,
+    ValidationFunctionDoubleArg,
+    ValidationFunctionMultiArg
+} from '@/core/utilities/validation/validation-rules';
 
 const validateFormData = (
     formData: Record<string, string>,
@@ -11,7 +15,14 @@ const validateFormData = (
     for (const field of Object.keys(formData)) {
         if (excludedFields.includes(field)) continue;
 
-        const fieldErrors = validationHandler(field, formData[field], validationErrors);
+        let fieldErrors = '';
+
+        if (field === 'confirmPassword' && formData.hasOwnProperty.call(formData, 'password')) {
+            fieldErrors = validationHandler(field, formData[field], validationErrors, formData['password']);
+        } else {
+            fieldErrors = validationHandler(field, formData[field], validationErrors);
+        }
+
         if (fieldErrors) {
             isValid = false;
         }
@@ -21,7 +32,7 @@ const validateFormData = (
     return isValid;
 };
 
-const validationHandler = (field: string, value: string, validationErrors: { [k: string]: string; }): string => {
+const validationHandler = (field: string, value: string, validationErrors: { [k: string]: string; }, originalPassword?: string): string => {
     const rules = validationErrors[field].split('|');
     let errorMessage: string = '';
 
@@ -30,12 +41,15 @@ const validationHandler = (field: string, value: string, validationErrors: { [k:
         const validationFunction = validationRules[ruleName];
 
         if (validationFunction) {
-            const param = ruleValue ? parseInt(ruleValue) : undefined;
-
-            if (typeof param === 'number') {
-                errorMessage = (validationFunction as ValidationFunctionDoubleArg)(value, param);
+            if (field === 'confirmPassword' && ruleName === 'confirmPassword') {
+                errorMessage = (validationFunction as ValidationFunctionMultiArg)(value, originalPassword);
             } else {
-                errorMessage = (validationFunction as ValidationFunctionSingleArg)(value);
+                const param = ruleValue ? parseInt(ruleValue) : undefined;
+                if (typeof param === 'number') {
+                    errorMessage = (validationFunction as ValidationFunctionDoubleArg)(value, param);
+                } else {
+                    errorMessage = (validationFunction as ValidationFunctionSingleArg)(value);
+                }
             }
 
             if (errorMessage) {
