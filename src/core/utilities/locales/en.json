@@ -3,7 +3,8 @@
         "production": "Production",
         "team": "Team",
         "company": "Company",
-        "settings": "Settings"
+        "settings": "Settings",
+        "profile": "Profile"
     },
 
     "buttons": {
