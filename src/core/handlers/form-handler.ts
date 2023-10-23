@@ -1,6 +1,7 @@
 import APIService from '@/core/services/api-service';
 import validateFormData from '@/core/handlers/validation-handler';
 import ConfigInterface from '@/core/interfaces/ConfigInterface';
+import AuthService from '@/core/services/auth-service';
 
 export const getFormData = async (
     id: number,
@@ -27,8 +28,25 @@ export const submitFormData = async (
 
     if (!isValid) return false;
 
-    if (!id) {
-        await APIService.store(config.API, formData);
+    if (config.name === 'signIn') {
+        const { email, password } = formData;
+        const signInSuccessful = await AuthService.signIn(email, password);
+
+        if (signInSuccessful) {
+            resetForm(formData);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    if (!id && config.name !== 'signIn') {
+        const response = await APIService.store(config.API, formData);
+
+        if (config.name === 'signup' && typeof response.data.id === 'number') {
+            AuthService.signup(response.data.id);
+        }
+
         resetForm(formData);
         return true;
     }

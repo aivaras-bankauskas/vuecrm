@@ -28,6 +28,7 @@
     const submitForm = async (): Promise<void> => {
         const isFormSubmitted = await submitFormData(props.urlId as number, formData, initialFormData, validationErrors, props.config, errors);
         if (isFormSubmitted) router.push(props.config.redirect as string);
+        if (isFormSubmitted && props.config.name === 'signIn') router.push('/');
     };
 
     const getPlaceholderAttribute = (inputName: string): string => placeholderAttribute(inputName, t, te);

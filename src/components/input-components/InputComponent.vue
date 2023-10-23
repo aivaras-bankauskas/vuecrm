@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { computed, defineEmits, ref } from 'vue';
+    import { computed, ref } from 'vue';
     import IconComponent from '../icon-components/IconComponent.vue';
 
     const props = withDefaults(defineProps<{
