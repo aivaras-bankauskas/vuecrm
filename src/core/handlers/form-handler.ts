@@ -24,7 +24,7 @@ export const submitFormData = async (
 ): Promise<boolean> => {
     const excludedFields = id ? ['id'] : [];
 
-    const isValid = validateFormData(formData, validationErrors, excludedFields, errors);
+    const isValid = await validateFormData(formData, validationErrors, excludedFields, errors, config);
 
     if (!isValid) return false;
 

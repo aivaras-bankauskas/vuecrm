@@ -1,15 +1,19 @@
 import validationRules, {
     ValidationFunctionSingleArg,
     ValidationFunctionDoubleArg,
-    ValidationFunctionMultiArg
+    ValidationFunctionMultiArg,
+    ValidationFunctionArrayArg
 } from '@/core/utilities/validation/validation-rules';
+import APIService from '@/core/services/api-service';
+import ConfigInterface from '@/core/interfaces/ConfigInterface';
 
-const validateFormData = (
+const validateFormData = async (
     formData: Record<string, string>,
     validationErrors: Record<string, string>,
     excludedFields: string[],
-    errors: Record<string, string>
-): boolean => {
+    errors: Record<string, string>,
+    config: ConfigInterface
+): Promise<boolean> => {
     let isValid = true;
 
     for (const field of Object.keys(formData)) {
@@ -18,9 +22,9 @@ const validateFormData = (
         let fieldErrors = '';
 
         if (field === 'confirmPassword' && formData.hasOwnProperty.call(formData, 'password')) {
-            fieldErrors = validationHandler(field, formData[field], validationErrors, formData['password']);
+            fieldErrors = await validationHandler(field, formData[field], validationErrors, formData['password']);
         } else {
-            fieldErrors = validationHandler(field, formData[field], validationErrors);
+            fieldErrors = await validationHandler(field, formData[field], validationErrors, undefined, config);
         }
 
         if (fieldErrors) {
@@ -32,7 +36,13 @@ const validateFormData = (
     return isValid;
 };
 
-const validationHandler = (field: string, value: string, validationErrors: { [k: string]: string; }, originalPassword?: string): string => {
+const validationHandler = async (
+    field: string,
+    value: string,
+    validationErrors: { [k: string]: string; },
+    originalPassword?: string,
+    config?: ConfigInterface
+): Promise<string> => {
     const rules = validationErrors[field].split('|');
     let errorMessage: string = '';
 
@@ -41,7 +51,11 @@ const validationHandler = (field: string, value: string, validationErrors: { [k:
         const validationFunction = validationRules[ruleName];
 
         if (validationFunction) {
-            if (field === 'confirmPassword' && ruleName === 'confirmPassword') {
+            if (ruleName === 'unique') {
+                const data = await APIService.getAll(config?.API as string);
+                const arrayToCheck = data.data.map((item: any) => item[field]);
+                errorMessage = (validationFunction as ValidationFunctionArrayArg)(value, arrayToCheck);
+            } else if (field === 'confirmPassword' && ruleName === 'confirmPassword') {
                 errorMessage = (validationFunction as ValidationFunctionMultiArg)(value, originalPassword);
             } else {
                 const param = ruleValue ? parseInt(ruleValue) : undefined;

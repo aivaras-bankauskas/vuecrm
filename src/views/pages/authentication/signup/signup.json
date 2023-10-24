@@ -25,7 +25,7 @@
         {
             "inputName": "email",
             "inputType": "email",
-            "rules": "required|email"
+            "rules": "required|email|unique"
         },
         {
             "inputName": "password",
