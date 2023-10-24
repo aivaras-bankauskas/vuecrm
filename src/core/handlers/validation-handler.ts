@@ -24,13 +24,17 @@ const validateFormData = async (
         if (field === 'confirmPassword' && formData.hasOwnProperty.call(formData, 'password')) {
             fieldErrors = await validationHandler(field, formData[field], validationErrors, formData['password']);
         } else {
-            fieldErrors = await validationHandler(field, formData[field], validationErrors, undefined, config);
+            fieldErrors = await validationHandler(field, formData[field], validationErrors, undefined, config, formData);
         }
 
         if (fieldErrors) {
             isValid = false;
         }
         errors[field] = fieldErrors;
+
+        if (fieldErrors === 'mismatch' && field === 'password') {
+            errors['email'] = 'mismatch';
+        }
     }
 
     return isValid;
@@ -41,7 +45,8 @@ const validationHandler = async (
     value: string,
     validationErrors: { [k: string]: string; },
     originalPassword?: string,
-    config?: ConfigInterface
+    config?: ConfigInterface,
+    formData?: Record<string, string>
 ): Promise<string> => {
     const rules = validationErrors[field].split('|');
     let errorMessage: string = '';
@@ -55,6 +60,15 @@ const validationHandler = async (
                 const data = await APIService.getAll(config?.API as string);
                 const arrayToCheck = data.data.map((item: any) => item[field]);
                 errorMessage = (validationFunction as ValidationFunctionArrayArg)(value, arrayToCheck);
+            } else if (ruleName === 'mismatch') {
+                const data = await APIService.getAll(config?.API as string);
+                const matchingUser = data.data.find((item: any) => item.email === formData?.email);
+
+                if (matchingUser) {
+                    errorMessage = (validationFunction as ValidationFunctionMultiArg)(value, matchingUser.password);
+                } else {
+                    errorMessage = 'mismatch';
+                }
             } else if (field === 'confirmPassword' && ruleName === 'confirmPassword') {
                 errorMessage = (validationFunction as ValidationFunctionMultiArg)(value, originalPassword);
             } else {
