@@ -3,7 +3,7 @@ import validationRules, {
     ValidationFunctionDoubleArg,
     ValidationFunctionMultiArg,
     ValidationFunctionArrayArg
-} from '@/core/utilities/validation/validation-rules';
+} from '@/core/validation/validation-rules';
 import APIService from '@/core/services/api-service';
 import ConfigInterface from '@/core/interfaces/ConfigInterface';
 
