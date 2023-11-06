@@ -23,67 +23,61 @@ export const submitFormData = async (
     config: ConfigInterface,
     errors: FormDataInterface
 ): Promise<boolean> => {
-    if (!(await validateForm(id, formData, validationErrors, errors, config))) {
-        return false;
-    }
-    return config.name === 'signIn'
-        ? handleSignIn(formData)
-        : await handleForm(id, formData, initialFormData, config);
-};
-
-const validateForm = async (
-    id: number,
-    formData: FormDataInterface,
-    validationErrors: FormDataInterface,
-    errors: FormDataInterface,
-    config: ConfigInterface
-): Promise<boolean> => {
     const excludedFields = id ? ['id'] : [];
-    return await validateFormData(formData, validationErrors, excludedFields, errors, config);
+
+    if (!(await validateFormData(formData, validationErrors, excludedFields, errors, config))) {
+        return false;
+    };
+
+    switch (config.name) {
+        case 'signIn':
+            return handleSignIn(formData);
+        case 'signup':
+            return handleSignup(formData, config);
+        default:
+            return id
+                ? updateForm(id, formData, initialFormData, config)
+                : submitForm(formData, config);
+    }
 };
 
-const handleSignIn = async (formData: FormDataInterface): Promise<boolean> => {
-    const { email, password } = formData;
-    if (await AuthService.signIn(email, password)) {
-        resetForm(formData);
-        return true;
-    }
-    return false;
-};
-
-const handleForm = async (
-    id: number,
-    formData: FormDataInterface,
-    initialFormData: FormDataInterface,
-    config: ConfigInterface
-): Promise<boolean> => {
-    const formDataCopy = { ...formData };
-    if (config.name === 'signup') {
-        delete formDataCopy.confirmPassword;
-    }
-
-    if (!id) {
-        return await handleNewForm(formDataCopy, config);
-    }
-
-    if (JSON.stringify(initialFormData) !== JSON.stringify(formData)) {
-        await APIService.update(config.API, id, formDataCopy);
-        await getFormData(id, config.API, formData, initialFormData);
-    }
-    return true;
-};
-
-const handleNewForm = async (formData: FormDataInterface, config: ConfigInterface): Promise<boolean> => {
-    const response = await APIService.store(config.API, formData);
-    if (config.name === 'signup' && typeof response.data.id === 'number') {
-        AuthService.signup(response.data.id);
-    }
+const submitForm = async (formData: FormDataInterface, config: ConfigInterface): Promise<boolean> => {
+    await APIService.store(config.API, formData);
     resetForm(formData);
     return true;
 };
 
+const updateForm = async (id: number, formData: FormDataInterface, initialFormData: FormDataInterface, config: ConfigInterface): Promise<boolean> => {
+    if (JSON.stringify(initialFormData) !== JSON.stringify(formData)) {
+        await APIService.update(config.API, id, formData);
+        resetForm(formData);
+    };
+    return true;
+};
+
+const handleSignup = async (formData: FormDataInterface, config: ConfigInterface): Promise<boolean> => {
+    const formDataCopy = { ...formData };
+    delete formDataCopy.confirmPassword;
+
+    const response = await APIService.store(config.API, formDataCopy);
+    if (typeof response.data.id === 'number') {
+        AuthService.signup(response.data.id);
+        resetForm(formData);
+    }
+    return true;
+};
+
+const handleSignIn = async (formData: FormDataInterface): Promise<boolean> => {
+    const { email, password } = formData;
+    const response = await AuthService.signIn(email, password);
+    if (response) {
+        resetForm(formData);
+    }
+    return true;
+};
+
 const resetForm = (formData: FormDataInterface): void => {
-    Object.keys(formData).forEach(field => {
+    for (const field in formData) {
         formData[field] = '';
-    });
+    }
 };
