@@ -1,27 +1,53 @@
-import validationRules, { ValidationFunctionSingleArg, ValidationFunctionDoubleArg } from '@/core/utilities/validation/validation-rules';
+import validationRules, {
+    ValidationFunctionSingleArg,
+    ValidationFunctionDoubleArg,
+    ValidationFunctionMultiArg,
+    ValidationFunctionArrayArg
+} from '@/core/utilities/validation/validation-rules';
+import APIService from '@/core/services/api-service';
+import ConfigInterface from '@/core/interfaces/ConfigInterface';
 
-const validateFormData = (
+const validateFormData = async (
     formData: Record<string, string>,
     validationErrors: Record<string, string>,
     excludedFields: string[],
-    errors: Record<string, string>
-): boolean => {
+    errors: Record<string, string>,
+    config: ConfigInterface
+): Promise<boolean> => {
     let isValid = true;
 
     for (const field of Object.keys(formData)) {
         if (excludedFields.includes(field)) continue;
 
-        const fieldErrors = validationHandler(field, formData[field], validationErrors);
+        let fieldErrors = '';
+
+        if (field === 'confirmPassword' && formData.hasOwnProperty.call(formData, 'password')) {
+            fieldErrors = await validationHandler(field, formData[field], validationErrors, formData['password']);
+        } else {
+            fieldErrors = await validationHandler(field, formData[field], validationErrors, undefined, config, formData);
+        }
+
         if (fieldErrors) {
             isValid = false;
         }
         errors[field] = fieldErrors;
+
+        if (fieldErrors === 'mismatch' && field === 'password') {
+            errors['email'] = 'mismatch';
+        }
     }
 
     return isValid;
 };
 
-const validationHandler = (field: string, value: string, validationErrors: { [k: string]: string; }): string => {
+const validationHandler = async (
+    field: string,
+    value: string,
+    validationErrors: { [k: string]: string; },
+    originalPassword?: string,
+    config?: ConfigInterface,
+    formData?: Record<string, string>
+): Promise<string> => {
     const rules = validationErrors[field].split('|');
     let errorMessage: string = '';
 
@@ -30,12 +56,28 @@ const validationHandler = (field: string, value: string, validationErrors: { [k:
         const validationFunction = validationRules[ruleName];
 
         if (validationFunction) {
-            const param = ruleValue ? parseInt(ruleValue) : undefined;
+            if (ruleName === 'unique') {
+                const data = await APIService.getAll(config?.API as string);
+                const arrayToCheck = data.data.map((item: any) => item[field]);
+                errorMessage = (validationFunction as ValidationFunctionArrayArg)(value, arrayToCheck);
+            } else if (ruleName === 'mismatch') {
+                const data = await APIService.getAll(config?.API as string);
+                const matchingUser = data.data.find((item: any) => item.email === formData?.email);
 
-            if (typeof param === 'number') {
-                errorMessage = (validationFunction as ValidationFunctionDoubleArg)(value, param);
+                if (matchingUser) {
+                    errorMessage = (validationFunction as ValidationFunctionMultiArg)(value, matchingUser.password);
+                } else {
+                    errorMessage = 'mismatch';
+                }
+            } else if (field === 'confirmPassword' && ruleName === 'confirmPassword') {
+                errorMessage = (validationFunction as ValidationFunctionMultiArg)(value, originalPassword);
             } else {
-                errorMessage = (validationFunction as ValidationFunctionSingleArg)(value);
+                const param = ruleValue ? parseInt(ruleValue) : undefined;
+                if (typeof param === 'number') {
+                    errorMessage = (validationFunction as ValidationFunctionDoubleArg)(value, param);
+                } else {
+                    errorMessage = (validationFunction as ValidationFunctionSingleArg)(value);
+                }
             }
 
             if (errorMessage) {

@@ -8,13 +8,14 @@
         "firstName": "",
         "lastName": "",
         "email": "",
-        "password": ""
+        "password": "",
+        "confirmPassword": ""
     },
     "inputs": [
         {
             "inputName": "firstName",
             "inputType": "text",
-            "rules": "required|alpha|min:4"
+            "rules": "required|alpha|min:2"
         },
         {
             "inputName": "lastName",
@@ -24,12 +25,17 @@
         {
             "inputName": "email",
             "inputType": "email",
-            "rules": "required|email"
+            "rules": "required|email|unique"
         },
         {
             "inputName": "password",
             "inputType": "password",
             "rules": "required|password|min:6"
+        },
+        {
+            "inputName": "confirmPassword",
+            "inputType": "password",
+            "rules": "required|password|confirmPassword|min:6"
         }
     ]
 }

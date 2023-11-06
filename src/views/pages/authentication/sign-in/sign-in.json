@@ -17,7 +17,7 @@
         {
             "inputName": "password",
             "inputType": "password",
-            "rules": "required|password|min:6"
+            "rules": "required|password|mismatch|min:6"
         }
     ]
 }

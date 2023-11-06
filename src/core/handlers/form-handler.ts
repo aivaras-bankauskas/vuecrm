@@ -24,9 +24,12 @@ export const submitFormData = async (
 ): Promise<boolean> => {
     const excludedFields = id ? ['id'] : [];
 
-    const isValid = validateFormData(formData, validationErrors, excludedFields, errors);
+    const isValid = await validateFormData(formData, validationErrors, excludedFields, errors, config);
 
     if (!isValid) return false;
+
+    const formDataCopy = { ...formData };
+    delete formDataCopy.confirmPassword;
 
     if (config.name === 'signIn') {
         const { email, password } = formData;
@@ -41,7 +44,13 @@ export const submitFormData = async (
     }
 
     if (!id && config.name !== 'signIn') {
-        const response = await APIService.store(config.API, formData);
+        const formDataCopy = { ...formData };
+
+        if (config.name === 'signup') {
+            delete formDataCopy.confirmPassword;
+        }
+
+        const response = await APIService.store(config.API, formDataCopy);
 
         if (config.name === 'signup' && typeof response.data.id === 'number') {
             AuthService.signup(response.data.id);

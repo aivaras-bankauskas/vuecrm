@@ -7,6 +7,7 @@
     import  NavigationInterface from '@/interfaces/NavigationInterface';
     import HamburgerComponent from '@/components/icon-components/HamburgerComponent.vue';
     import IconComponent from '@/components/icon-components/IconComponent.vue';
+    import router from '@/router';
 
     defineProps({
         navigationItems: {
@@ -32,6 +33,7 @@
     const handleSignOut = (): void => {
         authStore.signOut();
         isUserMenuOpen.value = false;
+        router.push('/sign-in');
     };
 
     const toggleMenu = (): void => {

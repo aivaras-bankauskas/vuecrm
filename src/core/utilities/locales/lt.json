@@ -25,6 +25,9 @@
 
     "errors": {
         "password": "Laukelyje {inputName} privaloma naudoti bent vieną skaičių ir raidę",
+        "confirmPassword": "Slaptažodžiai nesutampa",
+        "unique": "Toks {inputName} jau egzistuoja",
+        "mismatch": "Neteisingas el. paštas arba slaptažodis",
         "required": "Laukelis {inputName} yra privalomas",
         "email": "Laukelis {inputName} turi būti el. pašto adresas",
         "alpha": "Laukelyje {inputName} galima naudoti tik raides",
