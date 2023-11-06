@@ -6,38 +6,33 @@ import validationRules, {
 } from '@/core/validation/validation-rules';
 import APIService from '@/core/services/api-service';
 import ConfigInterface from '@/core/interfaces/ConfigInterface';
+import FormDataInterface from '@/core/interfaces/FormDataInterface';
 
 const validateFormData = async (
-    formData: Record<string, string>,
-    validationErrors: Record<string, string>,
+    formData: FormDataInterface,
+    validationErrors: FormDataInterface,
     excludedFields: string[],
-    errors: Record<string, string>,
+    errors: FormDataInterface,
     config: ConfigInterface
 ): Promise<boolean> => {
-    let isValid = true;
+    const validationPromises = Object.keys(formData)
+        .filter(field => !excludedFields.includes(field))
+        .map(async field => {
+            const fieldErrors = field === 'confirmPassword' && formData.password
+                ? await validationHandler(field, formData[field], validationErrors, formData.password)
+                : await validationHandler(field, formData[field], validationErrors, undefined, config, formData);
 
-    for (const field of Object.keys(formData)) {
-        if (excludedFields.includes(field)) continue;
-
-        let fieldErrors = '';
-
-        if (field === 'confirmPassword' && formData.hasOwnProperty.call(formData, 'password')) {
-            fieldErrors = await validationHandler(field, formData[field], validationErrors, formData['password']);
-        } else {
-            fieldErrors = await validationHandler(field, formData[field], validationErrors, undefined, config, formData);
-        }
-
-        if (fieldErrors) {
-            isValid = false;
-        }
-        errors[field] = fieldErrors;
-
-        if (fieldErrors === 'mismatch' && field === 'password') {
-            errors['email'] = 'mismatch';
-        }
-    }
-
-    return isValid;
+            if (fieldErrors) {
+                errors[field] = fieldErrors;
+                if (field === 'password' && fieldErrors === 'mismatch') {
+                    errors['email'] = 'mismatch';
+                }
+                return false;
+            }
+            return true;
+        });
+    const results = await Promise.all(validationPromises);
+    return results.every(isFieldValid => isFieldValid);
 };
 
 const validationHandler = async (
@@ -46,7 +41,7 @@ const validationHandler = async (
     validationErrors: { [k: string]: string; },
     originalPassword?: string,
     config?: ConfigInterface,
-    formData?: Record<string, string>
+    formData?: FormDataInterface
 ): Promise<string> => {
     const rules = validationErrors[field].split('|');
     let errorMessage: string = '';
@@ -58,11 +53,11 @@ const validationHandler = async (
         if (validationFunction) {
             if (ruleName === 'unique') {
                 const data = await APIService.getAll(config?.API as string);
-                const arrayToCheck = data.data.map((item: Record<string, string>) => item[field]);
+                const arrayToCheck = data.data.map((item: FormDataInterface) => item[field]);
                 errorMessage = (validationFunction as ValidationFunctionArrayArg)(value, arrayToCheck);
             } else if (ruleName === 'mismatch') {
                 const data = await APIService.getAll(config?.API as string);
-                const matchingUser = data.data.find((item: Record<string, string>) => item.email === formData?.email);
+                const matchingUser = data.data.find((item: FormDataInterface) => item.email === formData?.email);
 
                 if (matchingUser) {
                     errorMessage = (validationFunction as ValidationFunctionMultiArg)(value, matchingUser.password);
