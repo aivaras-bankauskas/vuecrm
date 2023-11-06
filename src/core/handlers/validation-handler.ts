@@ -45,42 +45,40 @@ const validationHandler = async (
 ): Promise<string> => {
     const rules = validationErrors[field].split('|');
     let errorMessage: string = '';
+    let data = null;
 
     for (const rule of rules) {
         const [ruleName, ruleValue] = rule.split(':');
         const validationFunction = validationRules[ruleName];
 
         if (validationFunction) {
+            if (ruleName === 'unique' || ruleName === 'mismatch') {
+                if (!data) {
+                    const response = await APIService.getAll(config?.API as string);
+                    data = response.data;
+                }
+            }
             if (ruleName === 'unique') {
-                const data = await APIService.getAll(config?.API as string);
-                const arrayToCheck = data.data.map((item: FormDataInterface) => item[field]);
+                const arrayToCheck = data.map((item: FormDataInterface) => item[field]);
                 errorMessage = (validationFunction as ValidationFunctionArrayArg)(value, arrayToCheck);
             } else if (ruleName === 'mismatch') {
-                const data = await APIService.getAll(config?.API as string);
-                const matchingUser = data.data.find((item: FormDataInterface) => item.email === formData?.email);
-
-                if (matchingUser) {
-                    errorMessage = (validationFunction as ValidationFunctionMultiArg)(value, matchingUser.password);
-                } else {
-                    errorMessage = 'mismatch';
-                }
+                const matchingUser = data.find((item: FormDataInterface) => item.email === formData?.email);
+                errorMessage = matchingUser
+                    ? (validationFunction as ValidationFunctionMultiArg)(value, matchingUser.password)
+                    : 'mismatch';
             } else if (field === 'confirmPassword' && ruleName === 'confirmPassword') {
                 errorMessage = (validationFunction as ValidationFunctionMultiArg)(value, originalPassword as string);
             } else {
-                const param = ruleValue ? parseInt(ruleValue) : undefined;
-                if (typeof param === 'number') {
-                    errorMessage = (validationFunction as ValidationFunctionDoubleArg)(value, param);
-                } else {
-                    errorMessage = (validationFunction as ValidationFunctionSingleArg)(value);
-                }
+                const param = ruleValue ? parseInt(ruleValue, 10) : undefined;
+                errorMessage = param !== undefined
+                    ? (validationFunction as ValidationFunctionDoubleArg)(value, param)
+                    : (validationFunction as ValidationFunctionSingleArg)(value);
             }
-
             if (errorMessage) {
                 break;
             }
         }
     }
-
     return errorMessage;
 };
 
