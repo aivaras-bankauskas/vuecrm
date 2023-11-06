@@ -11,13 +11,13 @@
     const props = defineProps<{
         urlId: number | null;
         config: ConfigInterface;
-        data: unknown;
+        data: Record<string, string>;
         inputs: InputInterface[];
     }>();
 
     const { t, te } = useI18n();
-    const formData = reactive(props.data as Record<string, string>);
-    const initialFormData = reactive({ ...props.data as Record<string, string> });
+    const formData = reactive(props.data);
+    const initialFormData = reactive({ ...props.data });
     const validationErrors = reactive(Object.fromEntries(props.inputs.map(({ inputName, rules }) => [inputName, rules])));
     const errors = reactive<Record<string, string>>({});
 
