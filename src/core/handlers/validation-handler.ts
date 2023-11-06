@@ -58,11 +58,11 @@ const validationHandler = async (
         if (validationFunction) {
             if (ruleName === 'unique') {
                 const data = await APIService.getAll(config?.API as string);
-                const arrayToCheck = data.data.map((item: any) => item[field]);
+                const arrayToCheck = data.data.map((item: Record<string, string>) => item[field]);
                 errorMessage = (validationFunction as ValidationFunctionArrayArg)(value, arrayToCheck);
             } else if (ruleName === 'mismatch') {
                 const data = await APIService.getAll(config?.API as string);
-                const matchingUser = data.data.find((item: any) => item.email === formData?.email);
+                const matchingUser = data.data.find((item: Record<string, string>) => item.email === formData?.email);
 
                 if (matchingUser) {
                     errorMessage = (validationFunction as ValidationFunctionMultiArg)(value, matchingUser.password);
@@ -70,7 +70,7 @@ const validationHandler = async (
                     errorMessage = 'mismatch';
                 }
             } else if (field === 'confirmPassword' && ruleName === 'confirmPassword') {
-                errorMessage = (validationFunction as ValidationFunctionMultiArg)(value, originalPassword);
+                errorMessage = (validationFunction as ValidationFunctionMultiArg)(value, originalPassword as string);
             } else {
                 const param = ruleValue ? parseInt(ruleValue) : undefined;
                 if (typeof param === 'number') {
