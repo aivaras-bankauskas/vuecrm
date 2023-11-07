@@ -1,5 +1,5 @@
 <template>
     <div>
-        Production Page
+        Customers Page
     </div>
 </template>

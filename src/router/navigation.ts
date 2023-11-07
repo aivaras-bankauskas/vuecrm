@@ -7,15 +7,15 @@ export const generateNavigationRoutes = (): RouteRecordRaw[] =>
         const { name, vue, auth } = item.menuItem;
         return {
             name,
-            path: `/${name}/:id?`,
-            component: () => lazyLoadView(vue),
+            path: `/${name}`,
+            component: () => lazyLoadView(name, vue),
             meta: {
                 requiresAuth: auth
             }
         };
     });
 
-const lazyLoadView = (vue: string): Promise<typeof import('*.vue')> =>
-    import(`@/views/pages/${vue}.vue`)
+const lazyLoadView = (name: string, vue: string): Promise<typeof import('*.vue')> =>
+    import(`@/views/pages/${name}/${vue}.vue`)
         .then((module) => module.default)
         .catch(() => import('@/views/pages/NotFound.vue'));
