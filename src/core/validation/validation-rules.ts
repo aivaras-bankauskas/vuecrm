@@ -3,7 +3,7 @@ export type ValidationFunctionDoubleArg = (value: string, param: number) => stri
 export type ValidationFunctionMultiArg = (value: string, ...params: string[]) => string;
 export type ValidationFunctionArrayArg = (value: string, array: string[]) => string;
 
-type ValidationFunction = ValidationFunctionSingleArg | ValidationFunctionDoubleArg | ValidationFunctionMultiArg | ValidationFunctionArrayArg;
+export type ValidationFunction = ValidationFunctionSingleArg | ValidationFunctionDoubleArg | ValidationFunctionMultiArg | ValidationFunctionArrayArg;
 
 const validationRules: Record<string, ValidationFunction> = {
     password: (value: string): string => (!/\p{L}/gu.test(value) || !/\d/.test(value)) ? 'password' : '',
