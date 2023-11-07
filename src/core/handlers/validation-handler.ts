@@ -21,6 +21,9 @@ const validationHandler = async (
     for (const field of fieldsToValidate) {
         const value = formData[field];
         const fieldErrors = await validateField(field, value, validationErrors, formData, config);
+        if (fieldErrors === 'mismatch' && field === 'password') {
+            errors['email'] = 'mismatch';
+        };
         errors[field] = fieldErrors || '';
     }
     return !Object.values(errors).some(error => error !== '');
