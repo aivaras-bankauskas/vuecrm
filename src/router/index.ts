@@ -1,15 +1,17 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import { requireAuth } from './route-guards';
-import authentication from './authentication';
 import { generateNavigationRoutes } from './navigation';
+import authentication from './authentication';
+import customers from './customers';
 
 const routes: RouteRecordRaw[] = [
     {
         path: '/',
         redirect: '/company'
     },
-    ...authentication,
     ...generateNavigationRoutes(),
+    ...authentication,
+    ...customers,
     {
         name: 'not-found',
         path: '/:pathMatch(.*)*',
