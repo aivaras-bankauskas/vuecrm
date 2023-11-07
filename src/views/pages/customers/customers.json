@@ -1,0 +1,53 @@
+{
+    "config": {
+        "name": "customers",
+        "API": "/customers",
+        "redirect": "/customers"
+    },
+    "formData": {
+        "fullName": "",
+        "email": "",
+        "phone": "",
+        "address": "",
+        "city": "",
+        "zip": "",
+        "country": ""
+    },
+    "inputs": [
+        {
+            "inputName": "fullName",
+            "inputType": "text",
+            "rules": "required|min:2"
+        },
+        {
+            "inputName": "email",
+            "inputType": "email",
+            "rules": "required|email"
+        },
+        {
+            "inputName": "phone",
+            "inputType": "text",
+            "rules": "required|min:10"
+        },
+        {
+            "inputName": "address",
+            "inputType": "text",
+            "rules": "required|min:2"
+        },
+        {
+            "inputName": "city",
+            "inputType": "text",
+            "rules": "required|min:2"
+        },
+        {
+            "inputName": "zip",
+            "inputType": "text",
+            "rules": "required|min:2"
+        },
+        {
+            "inputName": "country",
+            "inputType": "text",
+            "rules": "required|min:2"
+        }
+    ]
+}
