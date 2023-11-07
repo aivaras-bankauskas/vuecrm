@@ -1,8 +1,9 @@
 {
     "navigation": {
-        "production": "Gamyba",
-        "team": "Komanda",
         "company": "Įmonė",
+        "team": "Komanda",
+        "customers": "Klientai",
+        "suppliers": "Tiekėjai",
         "settings": "Nustatymai",
         "profile": "Profilis"
     },

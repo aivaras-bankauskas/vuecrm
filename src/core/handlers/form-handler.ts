@@ -1,13 +1,14 @@
 import APIService from '@/core/services/api-service';
-import validateFormData from '@/core/handlers/validation-handler';
+import validationHandler from '@/core/handlers/validation-handler';
 import ConfigInterface from '@/core/interfaces/ConfigInterface';
+import FormDataInterface from '@/core/interfaces/FormDataInterface';
 import AuthService from '@/core/services/auth-service';
 
 export const getFormData = async (
     id: number,
     endpoint: string,
-    formData: Record<string, string>,
-    initialFormData: Record<string, string>
+    formData: FormDataInterface,
+    initialFormData: FormDataInterface
 ): Promise<void> => {
     const response = await APIService.get(endpoint, id);
     Object.assign(formData, response.data);
@@ -16,59 +17,66 @@ export const getFormData = async (
 
 export const submitFormData = async (
     id: number,
-    formData: Record<string, string>,
-    initialFormData: Record<string, string>,
-    validationErrors: Record<string, string>,
+    formData: FormDataInterface,
+    initialFormData: FormDataInterface,
+    validationErrors: FormDataInterface,
     config: ConfigInterface,
-    errors: Record<string, string>
+    errors: FormDataInterface
 ): Promise<boolean> => {
     const excludedFields = id ? ['id'] : [];
 
-    const isValid = await validateFormData(formData, validationErrors, excludedFields, errors, config);
+    if (!(await validationHandler(formData, validationErrors, excludedFields, errors, config))) {
+        return false;
+    };
 
-    if (!isValid) return false;
+    switch (config.name) {
+        case 'signIn':
+            return handleSignIn(formData);
+        case 'signup':
+            return handleSignup(formData, config);
+        default:
+            return id
+                ? updateForm(id, formData, initialFormData, config)
+                : submitForm(formData, config);
+    }
+};
 
+const submitForm = async (formData: FormDataInterface, config: ConfigInterface): Promise<boolean> => {
+    await APIService.store(config.API, formData);
+    resetForm(formData);
+    return true;
+};
+
+const updateForm = async (id: number, formData: FormDataInterface, initialFormData: FormDataInterface, config: ConfigInterface): Promise<boolean> => {
+    if (JSON.stringify(initialFormData) !== JSON.stringify(formData)) {
+        await APIService.update(config.API, id, formData);
+        resetForm(formData);
+    };
+    return true;
+};
+
+const handleSignup = async (formData: FormDataInterface, config: ConfigInterface): Promise<boolean> => {
     const formDataCopy = { ...formData };
     delete formDataCopy.confirmPassword;
 
-    if (config.name === 'signIn') {
-        const { email, password } = formData;
-        const signInSuccessful = await AuthService.signIn(email, password);
-
-        if (signInSuccessful) {
-            resetForm(formData);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    if (!id && config.name !== 'signIn') {
-        const formDataCopy = { ...formData };
-
-        if (config.name === 'signup') {
-            delete formDataCopy.confirmPassword;
-        }
-
-        const response = await APIService.store(config.API, formDataCopy);
-
-        if (config.name === 'signup' && typeof response.data.id === 'number') {
-            AuthService.signup(response.data.id);
-        }
-
+    const response = await APIService.store(config.API, formDataCopy);
+    if (typeof response.data.id === 'number') {
+        AuthService.signup(response.data.id);
         resetForm(formData);
-        return true;
-    }
-
-    if (JSON.stringify(initialFormData) !== JSON.stringify(formData)) {
-        await APIService.update(config.API, id, formData);
-        getFormData(id, config.API, formData, initialFormData);
-        return true;
     }
     return true;
 };
 
-const resetForm = (formData: Record<string, string>): void => {
+const handleSignIn = async (formData: FormDataInterface): Promise<boolean> => {
+    const { email, password } = formData;
+    const response = await AuthService.signIn(email, password);
+    if (response) {
+        resetForm(formData);
+    }
+    return true;
+};
+
+const resetForm = (formData: FormDataInterface): void => {
     for (const field in formData) {
         formData[field] = '';
     }

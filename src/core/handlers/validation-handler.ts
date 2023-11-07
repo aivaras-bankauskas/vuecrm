@@ -1,92 +1,99 @@
 import validationRules, {
+    ValidationFunction,
     ValidationFunctionSingleArg,
     ValidationFunctionDoubleArg,
     ValidationFunctionMultiArg,
     ValidationFunctionArrayArg
-} from '@/core/utilities/validation/validation-rules';
+} from '@/core/validation/validation-rules';
 import APIService from '@/core/services/api-service';
 import ConfigInterface from '@/core/interfaces/ConfigInterface';
-
-const validateFormData = async (
-    formData: Record<string, string>,
-    validationErrors: Record<string, string>,
-    excludedFields: string[],
-    errors: Record<string, string>,
-    config: ConfigInterface
-): Promise<boolean> => {
-    let isValid = true;
-
-    for (const field of Object.keys(formData)) {
-        if (excludedFields.includes(field)) continue;
-
-        let fieldErrors = '';
-
-        if (field === 'confirmPassword' && formData.hasOwnProperty.call(formData, 'password')) {
-            fieldErrors = await validationHandler(field, formData[field], validationErrors, formData['password']);
-        } else {
-            fieldErrors = await validationHandler(field, formData[field], validationErrors, undefined, config, formData);
-        }
-
-        if (fieldErrors) {
-            isValid = false;
-        }
-        errors[field] = fieldErrors;
-
-        if (fieldErrors === 'mismatch' && field === 'password') {
-            errors['email'] = 'mismatch';
-        }
-    }
-
-    return isValid;
-};
+import FormDataInterface from '@/core/interfaces/FormDataInterface';
 
 const validationHandler = async (
+    formData: FormDataInterface,
+    validationErrors: FormDataInterface,
+    excludedFields: string[],
+    errors: FormDataInterface,
+    config: ConfigInterface
+): Promise<boolean> => {
+    const fieldsToValidate = Object.keys(formData).filter(field => !excludedFields.includes(field));
+
+    for (const field of fieldsToValidate) {
+        const value = formData[field];
+        const fieldErrors = await validateField(field, value, validationErrors, formData, config);
+        if (fieldErrors === 'mismatch' && field === 'password') {
+            errors['email'] = 'mismatch';
+        };
+        errors[field] = fieldErrors || '';
+    }
+    return !Object.values(errors).some(error => error !== '');
+};
+
+const validateField = async (
     field: string,
     value: string,
-    validationErrors: { [k: string]: string; },
-    originalPassword?: string,
-    config?: ConfigInterface,
-    formData?: Record<string, string>
+    validationErrors: { [k: string]: string },
+    formData: FormDataInterface,
+    config: ConfigInterface
 ): Promise<string> => {
     const rules = validationErrors[field].split('|');
-    let errorMessage: string = '';
+    let externalData: FormDataInterface[] | undefined;
 
     for (const rule of rules) {
         const [ruleName, ruleValue] = rule.split(':');
         const validationFunction = validationRules[ruleName];
 
-        if (validationFunction) {
-            if (ruleName === 'unique') {
-                const data = await APIService.getAll(config?.API as string);
-                const arrayToCheck = data.data.map((item: any) => item[field]);
-                errorMessage = (validationFunction as ValidationFunctionArrayArg)(value, arrayToCheck);
-            } else if (ruleName === 'mismatch') {
-                const data = await APIService.getAll(config?.API as string);
-                const matchingUser = data.data.find((item: any) => item.email === formData?.email);
+        if (!validationFunction) continue;
 
-                if (matchingUser) {
-                    errorMessage = (validationFunction as ValidationFunctionMultiArg)(value, matchingUser.password);
-                } else {
-                    errorMessage = 'mismatch';
-                }
-            } else if (field === 'confirmPassword' && ruleName === 'confirmPassword') {
-                errorMessage = (validationFunction as ValidationFunctionMultiArg)(value, originalPassword);
-            } else {
-                const param = ruleValue ? parseInt(ruleValue) : undefined;
-                if (typeof param === 'number') {
-                    errorMessage = (validationFunction as ValidationFunctionDoubleArg)(value, param);
-                } else {
-                    errorMessage = (validationFunction as ValidationFunctionSingleArg)(value);
-                }
-            }
-
-            if (errorMessage) {
-                break;
-            }
+        if ((ruleName === 'unique' || ruleName === 'mismatch') && !externalData) {
+            const response = await APIService.getAll(config?.API as string);
+            externalData = response.data;
         }
-    }
 
-    return errorMessage;
+        const errorMessage = await applyValidationRule(
+            ruleName,
+            value,
+            ruleValue,
+            validationFunction,
+            field,
+            formData,
+            externalData
+        );
+
+        if (errorMessage) return errorMessage;
+    }
+    return '';
 };
 
-export default validateFormData;
+const applyValidationRule = async (
+    ruleName: string,
+    value: string,
+    ruleValue: string | undefined,
+    validationFunction: ValidationFunction,
+    field: string,
+    formData: FormDataInterface,
+    externalData?: FormDataInterface[]
+): Promise<string> => {
+    switch (ruleName) {
+        case 'unique': {
+            const arrayToCheck = externalData ? externalData.map(item => item[field]) : [];
+            return (validationFunction as ValidationFunctionArrayArg)(value, arrayToCheck);
+        }
+        case 'mismatch': {
+            const matchingUser = externalData ? externalData.find(item => item.email === formData.email) : undefined;
+            return matchingUser
+                ? (validationFunction as ValidationFunctionMultiArg)(value, matchingUser.password)
+                : 'mismatch';
+        }
+        case 'confirmPassword':
+            return (validationFunction as ValidationFunctionMultiArg)(value, formData.password);
+        default: {
+            const param = ruleValue ? parseInt(ruleValue, 10) : undefined;
+            return param !== undefined
+                ? (validationFunction as ValidationFunctionDoubleArg)(value, param)
+                : (validationFunction as ValidationFunctionSingleArg)(value);
+        }
+    }
+};
+
+export default validationHandler;

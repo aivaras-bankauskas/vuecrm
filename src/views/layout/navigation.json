@@ -2,9 +2,9 @@
     "navigationItems": [
         {
             "menuItem": {
-                "name": "production",
-                "vue": "ProductionPage",
-                "auth": true
+                "name": "company",
+                "vue": "CompanyPage",
+                "auth": false
             }
         },
         {
@@ -16,9 +16,16 @@
         },
         {
             "menuItem": {
-                "name": "company",
-                "vue": "CompanyPage",
-                "auth": false
+                "name": "customers",
+                "vue": "CustomersPage",
+                "auth": true
+            }
+        },
+        {
+            "menuItem": {
+                "name": "suppliers",
+                "vue": "SuppliersPage",
+                "auth": true
             }
         }
     ]

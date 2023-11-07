@@ -4,13 +4,13 @@
     import CardForm from '@/components/card-components/CardForm.vue';
     import ButtonComponent from '@/components/button-components/ButtonComponent.vue';
     import ButtonLinkWithText from '@/components/button-components/ButtonLinkWithText.vue';
-    import UserInterface from '@/interfaces/UserInterface';
+    import SignUpInterface from '@/interfaces/SignUpInterface';
     import data from './signup.json';
 
     const FormComponent = defineAsyncComponent(() => import('@/components/form-components/FormComponent.vue'));
 
     const { t } = useI18n({});
-    const formData = reactive<UserInterface>(data.formData);
+    const formData = reactive<SignUpInterface>(data.formData);
 
 </script>
 

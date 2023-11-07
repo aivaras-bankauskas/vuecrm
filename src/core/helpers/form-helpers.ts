@@ -1,11 +1,7 @@
 type TranslationFunction = (key: string, params?: Record<string, unknown>) => string;
 type TranslationExistFunction = (key: string) => boolean;
 
-export const placeholderAttribute = (
-    inputName: string,
-    t: TranslationFunction,
-    te: TranslationExistFunction
-): string => {
+export const placeholderAttribute = (inputName: string, t: TranslationFunction, te: TranslationExistFunction): string => {
     const getTranslation = (type: string): string => {
         const key = `${type}.${inputName}`;
         return te(key) ? t(key) : '';
@@ -17,11 +13,7 @@ export const placeholderAttribute = (
     return placeholder !== '' ? placeholder : label;
 };
 
-export const errorMessage = (
-    inputName: string,
-    error: string,
-    t: TranslationFunction
-): string => {
+export const errorMessage = (inputName: string, error: string, t: TranslationFunction): string => {
     if (error) {
         if (!error.includes(':')) {
             return t(`errors.${error}`, { inputName: t(`labels.${inputName}`) });

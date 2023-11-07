@@ -1,8 +1,9 @@
 {
     "navigation": {
-        "production": "Production",
-        "team": "Team",
         "company": "Company",
+        "team": "Team",
+        "customers": "Customers",
+        "suppliers": "Suppliers",
         "settings": "Settings",
         "profile": "Profile"
     },

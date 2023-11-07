@@ -3,23 +3,24 @@
     import { useI18n } from 'vue-i18n';
     import { getFormData, submitFormData } from '@/core/handlers/form-handler';
     import { placeholderAttribute, errorMessage } from '@/core/helpers/form-helpers';
+    import router from '@/router';
     import InputComponent from '../input-components/InputComponent.vue';
     import InputInterface from '@/core/interfaces/InputInterface';
     import ConfigInterface from '@/core/interfaces/ConfigInterface';
-    import router from '@/router';
+    import FormDataInterface from '@/core/interfaces/FormDataInterface';
 
     const props = defineProps<{
         urlId: number | null;
         config: ConfigInterface;
-        data: unknown;
+        data: FormDataInterface;
         inputs: InputInterface[];
     }>();
 
     const { t, te } = useI18n();
-    const formData = reactive(props.data as Record<string, string>);
-    const initialFormData = reactive({ ...props.data as Record<string, string> });
+    const formData = reactive(props.data);
+    const initialFormData = reactive({ ...props.data });
     const validationErrors = reactive(Object.fromEntries(props.inputs.map(({ inputName, rules }) => [inputName, rules])));
-    const errors = reactive<Record<string, string>>({});
+    const errors = reactive<FormDataInterface>({});
 
     onMounted(() => {
         props.urlId && getFormData(props.urlId, props.config.API, formData, initialFormData);
