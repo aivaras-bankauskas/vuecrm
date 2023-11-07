@@ -9,7 +9,7 @@ import APIService from '@/core/services/api-service';
 import ConfigInterface from '@/core/interfaces/ConfigInterface';
 import FormDataInterface from '@/core/interfaces/FormDataInterface';
 
-const validateFormData = async (
+const validationHandler = async (
     formData: FormDataInterface,
     validationErrors: FormDataInterface,
     excludedFields: string[],
@@ -93,4 +93,4 @@ const applyValidationRule = async (
     }
 };
 
-export default validateFormData;
+export default validationHandler;

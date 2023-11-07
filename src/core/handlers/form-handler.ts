@@ -1,5 +1,5 @@
 import APIService from '@/core/services/api-service';
-import validateFormData from '@/core/handlers/validation-handler';
+import validationHandler from '@/core/handlers/validation-handler';
 import ConfigInterface from '@/core/interfaces/ConfigInterface';
 import FormDataInterface from '@/core/interfaces/FormDataInterface';
 import AuthService from '@/core/services/auth-service';
@@ -25,7 +25,7 @@ export const submitFormData = async (
 ): Promise<boolean> => {
     const excludedFields = id ? ['id'] : [];
 
-    if (!(await validateFormData(formData, validationErrors, excludedFields, errors, config))) {
+    if (!(await validationHandler(formData, validationErrors, excludedFields, errors, config))) {
         return false;
     };
 
