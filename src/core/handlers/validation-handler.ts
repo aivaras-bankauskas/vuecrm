@@ -23,7 +23,6 @@ const validateFormData = async (
         const fieldErrors = await validateField(field, value, validationErrors, formData, config);
         errors[field] = fieldErrors || '';
     }
-
     return !Object.values(errors).some(error => error !== '');
 };
 
@@ -60,7 +59,6 @@ const validateField = async (
 
         if (errorMessage) return errorMessage;
     }
-
     return '';
 };
 
