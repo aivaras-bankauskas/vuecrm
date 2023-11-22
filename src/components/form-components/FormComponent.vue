@@ -17,8 +17,8 @@
     }>();
 
     const { t, te } = useI18n();
-    const formData = reactive(props.data);
     const initialFormData = reactive({ ...props.data });
+    const formData = reactive({ ...initialFormData });
     const validationErrors = reactive(Object.fromEntries(props.inputs.map(({ inputName, rules }) => [inputName, rules])));
     const errors = reactive<FormDataInterface>({});
 
