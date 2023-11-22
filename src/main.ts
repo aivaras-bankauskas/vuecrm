@@ -4,14 +4,17 @@ import './assets/css/main.css';
 import App from './App.vue';
 import router from './router';
 import i18n from './i18n';
-import axios from 'axios';
 import AuthService from '@/core/services/auth-service';
+import { apiClient } from '@/core/services/api-service';
 
-axios.interceptors.request.use(
+apiClient.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem('userToken');
+        const localData = localStorage.getItem('userToken');
+        const tokenObject = localData ? JSON.parse(localData) : null;
+        const token = tokenObject ? tokenObject.token : null;
+
         if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+            config.headers.Authorization = token;
         }
         return config;
     },
@@ -20,7 +23,7 @@ axios.interceptors.request.use(
     }
 );
 
-axios.interceptors.response.use(
+apiClient.interceptors.response.use(
     (response) => {
         return response;
     },
