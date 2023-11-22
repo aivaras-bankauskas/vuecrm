@@ -3,7 +3,6 @@
     import type { PropType } from 'vue';
     import { useI18n } from 'vue-i18n';
     import { useUserStore } from '@/store/user-store';
-    import { useAuthStore } from '@/store/auth-store';
     import  NavigationInterface from '@/interfaces/NavigationInterface';
     import HamburgerComponent from '@/components/icon-components/HamburgerComponent.vue';
     import IconComponent from '@/components/icon-components/IconComponent.vue';
@@ -18,12 +17,11 @@
 
     const { t, locale } = useI18n({});
     const userStore = useUserStore();
-    const authStore = useAuthStore();
     const isMenuOpen = ref(false);
     const isUserMenuOpen = ref(false);
 
     const currentUser = computed(() => userStore.currentUser);
-    const isUserSignedIn = computed(() => authStore.isUserSignedIn);
+    const isUserSignedIn = computed(() => userStore.isUserSignedIn);
     const fullName = computed(() => `${currentUser.value.firstName} ${currentUser.value.lastName}`);
 
     onMounted(async () => {
@@ -31,7 +29,7 @@
     });
 
     const handleSignOut = (): void => {
-        authStore.signOut();
+        userStore.signOut();
         isUserMenuOpen.value = false;
         router.push('/sign-in');
     };

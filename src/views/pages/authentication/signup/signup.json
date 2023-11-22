@@ -1,8 +1,8 @@
 {
     "config": {
         "name": "signup",
-        "API": "/users",
-        "redirect": "/users"
+        "API": "/register",
+        "redirect": "/team"
     },
     "formData": {
         "firstName": "",
@@ -25,7 +25,7 @@
         {
             "inputName": "email",
             "inputType": "email",
-            "rules": "required|email|unique"
+            "rules": "required|email"
         },
         {
             "inputName": "password",

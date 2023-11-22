@@ -1,3 +1,4 @@
+import { AxiosResponse } from 'axios';
 import APIService from '@/core/services/api-service';
 import validationHandler from '@/core/handlers/validation-handler';
 import ConfigInterface from '@/core/interfaces/ConfigInterface';
@@ -31,7 +32,7 @@ export const submitFormData = async (
 
     switch (config.name) {
         case 'signIn':
-            return handleSignIn(formData);
+            return handleSignIn(formData, config);
         case 'signup':
             return handleSignup(formData, config);
         default:
@@ -58,22 +59,22 @@ const updateForm = async (id: number, formData: FormDataInterface, initialFormDa
 const handleSignup = async (formData: FormDataInterface, config: ConfigInterface): Promise<boolean> => {
     const formDataCopy = { ...formData };
     delete formDataCopy.confirmPassword;
-
     const response = await APIService.store(config.API, formDataCopy);
-    if (typeof response.data.id === 'number') {
-        AuthService.signup(response.data.id);
-        resetForm(formData);
-    }
-    return true;
+    return handleAuthentication(formData, response);
 };
 
-const handleSignIn = async (formData: FormDataInterface): Promise<boolean> => {
-    const { email, password } = formData;
-    const response = await AuthService.signIn(email, password);
-    if (response) {
+const handleSignIn = async (formData: FormDataInterface, config: ConfigInterface): Promise<boolean> => {
+    const response = await APIService.store(config.API, formData);
+    return handleAuthentication(formData, response);
+};
+
+const handleAuthentication = (formData: FormDataInterface, response: AxiosResponse): boolean => {
+    if (response.data.data) {
+        AuthService.signIn(response.data.token);
         resetForm(formData);
+        return true;
     }
-    return true;
+    return false;
 };
 
 const resetForm = (formData: FormDataInterface): void => {

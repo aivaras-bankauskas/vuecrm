@@ -2,7 +2,7 @@
     "config": {
         "name": "team",
         "API": "/users",
-        "redirect": "/users"
+        "redirect": "/team"
     },
     "formData": {
         "firstName": "",

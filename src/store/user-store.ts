@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { useAuthStore } from '@/store/auth-store';
+import AuthService from '@/core/services/auth-service';
 import APIService from '@/core/services/api-service';
 import UserInterface from '@/interfaces/UserInterface';
 
@@ -11,23 +11,18 @@ export const useUserStore = defineStore({
         currentUser: {} as Partial<UserInterface>,
     }),
     actions: {
-        async getAllUsers() {
-            const response = await APIService.getAll('/users');
-            this.users = response.data;
-        },
-        async getCurrentUser(id: number) {
-            const user = await APIService.get('/users', id);
-            this.currentUser = user.data || {};
-        },
         async authenticatedUser() {
-            const authStore = useAuthStore();
             const localData = localStorage.getItem('userToken');
 
             if (localData) {
-                const { id } = JSON.parse(localData);
-                await this.getCurrentUser(id);
-                authStore.signIn();
+                const response = await APIService.getAll('/auth-user');
+                this.currentUser = response.data.data;
+                this.isUserSignedIn = true;
             }
+        },
+        signOut() {
+            AuthService.signOut();
+            this.isUserSignedIn = false;
         }
     },
 });

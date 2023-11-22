@@ -1,7 +1,7 @@
 {
     "config": {
         "name": "signIn",
-        "API": "/users",
+        "API": "/login",
         "redirect": "/"
     },
     "formData": {
@@ -17,7 +17,7 @@
         {
             "inputName": "password",
             "inputType": "password",
-            "rules": "required|password|mismatch|min:6"
+            "rules": "required|password|min:6"
         }
     ]
 }
