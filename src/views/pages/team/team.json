@@ -1,0 +1,29 @@
+{
+    "config": {
+        "name": "team",
+        "API": "/users",
+        "redirect": "/users"
+    },
+    "formData": {
+        "firstName": "",
+        "lastName": "",
+        "email": ""
+    },
+    "inputs": [
+        {
+            "inputName": "firstName",
+            "inputType": "text",
+            "rules": "required|alpha|min:2"
+        },
+        {
+            "inputName": "lastName",
+            "inputType": "text",
+            "rules": "required|alpha"
+        },
+        {
+            "inputName": "email",
+            "inputType": "email",
+            "rules": "required|email|unique"
+        }
+    ]
+}
