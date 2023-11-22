@@ -21,7 +21,7 @@
 
     const getTableData = async (): Promise<void> => {
         const response = await APIService.getAll(props.endpoint);
-        tableData.value = response.data;
+        tableData.value = response.data.data;
     };
 </script>
 
